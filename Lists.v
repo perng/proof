@@ -891,10 +891,12 @@ Qed.
 Lemma nonzeros_app : forall l1 l2 : natlist,
   nonzeros (l1 ++ l2) = (nonzeros l1) ++ (nonzeros l2).
 Proof.
-  intros. induction l2 as [|h2 t2 IHl2].
-  - simpl.rewrite -> app_nir_r.
-(* FILL IN HERE *) Admitted.
-(** [] *)
+  intros. induction l1 as [|h1 t1 IHl1].
+  - simpl.   reflexivity.
+  - simpl. destruct h1.
+    rewrite -> IHl1. reflexivity.
+    simpl. rewrite -> IHl1.reflexivity.
+Qed.
 
 (** **** Exercise: 2 stars (beq_natlist)  *)
 (** Fill in the definition of [beq_natlist], which compares
@@ -902,25 +904,49 @@ Proof.
     yields [true] for every list [l]. *)
 
 Fixpoint beq_natlist (l1 l2 : natlist) : bool :=
-  (* FILL IN HERE *) admit.
+  match l1 with
+  |nil => match l2 with
+          | nil => true
+          | h::t => false
+          end
+  |h1::t1 => match l2 with
+             | nil => false
+             | h2::t2 => if (beq_nat h1 h2) then beq_natlist t1 t2 else false
+             end
+  end.             
+
 
 Example test_beq_natlist1 :
   (beq_natlist nil nil = true).
- (* FILL IN HERE *) Admitted.
+Proof. simpl. reflexivity. Qed.
+
 
 Example test_beq_natlist2 :
   beq_natlist [1;2;3] [1;2;3] = true.
-(* FILL IN HERE *) Admitted.
+Proof. simpl. reflexivity. Qed.
+
 
 Example test_beq_natlist3 :
   beq_natlist [1;2;3] [1;2;4] = false.
- (* FILL IN HERE *) Admitted.
+Proof. simpl. reflexivity. Qed.
+
+Theorem beq_self: forall n:nat,
+    true = beq_nat n n.
+Proof.
+  intros. induction n.
+  - simpl. reflexivity.
+  - simpl.  rewrite <- IHn. reflexivity.
+Qed.    
+  
 
 Theorem beq_natlist_refl : forall l:natlist,
   true = beq_natlist l l.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros. induction l as [|h t IHl].
+  - simpl. reflexivity.
+  - simpl. rewrite <- beq_self. rewrite <- IHl. reflexivity.
+Qed.    
+  (** [] *)
 
 (* ###################################################### *)
 (** ** List Exercises, Part 2 *)
@@ -932,7 +958,11 @@ Proof.
 Theorem count_member_nonzero : forall (s : bag),
   leb 1 (count 1 (1 :: s)) = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. induction s as [|h t IHs].
+  - simpl. reflexivity.
+  - simpl. reflexivity.
+Qed.    
+
 
 (** The following lemma about [leb] might help you in the next proof. *)
 
@@ -948,8 +978,12 @@ Proof.
 Theorem remove_decreases_count: forall (s : bag),
   leb (count 0 (remove_one 0 s)) (count 0 s) = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros. induction s as [|h t IHs].
+  - simpl. reflexivity.
+  - destruct h. simpl. rewrite -> ble_n_Sn. reflexivity.
+    simpl. rewrite -> IHs. reflexivity.
+Qed.
+
 
 (** **** Exercise: 3 stars, optional (bag_count_sum)  *)
 (** Write down an interesting theorem [bag_count_sum] about bags
