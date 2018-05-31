@@ -895,7 +895,7 @@ Proof.
   - simpl.   reflexivity.
   - simpl. destruct h1.
     rewrite -> IHl1. reflexivity.
-    simpl. rewrite -> IHl1.reflexivity.
+    simpl. rewrite -> IHl1. reflexivity.
 Qed.
 
 (** **** Exercise: 2 stars (beq_natlist)  *)
@@ -1105,16 +1105,15 @@ Proof. reflexivity. Qed.
 Example test_hd_error3 : hd_error [5;6] = Some 5.
 Proof. reflexivity. Qed.
 
-(** [] *)
 
 (** **** Exercise: 1 star, optional (option_elim_hd)  *)
 (** This exercise relates your new [hd_error] to the old [hd]. *)
-
+(**
 Theorem option_elim_hd : forall (l:natlist) (default:nat),
   hd default l = option_elim default (hd_error l).
 Proof.
-  
-  (* FILL IN HERE *) Admitted.
+  *)
+  (* FILL IN HERE *)
 (** [] *)
 
 End NatList.
@@ -1148,8 +1147,12 @@ Definition beq_id x1 x2 :=
 (** **** Exercise: 1 star (beq_id_refl)  *)
 Theorem beq_id_refl : forall x, true = beq_id x x.
 Proof.
-  intros. 
+  intros. destruct x. simpl. induction n as [|n'].
+  - reflexivity.
+  - simpl. rewrite <- IHn'. reflexivity.
+Qed.
 (** [] *)
+
 
 (** Now we define the type of partial maps: *)
 
@@ -1194,7 +1197,8 @@ Theorem update_eq :
   forall (d : partial_map) (k : id) (v: nat),
     find k (update d k v) = Some v.
 Proof.
- (* FILL IN HERE *) Admitted.
+  intros. simpl. rewrite <-  beq_id_refl. reflexivity.
+Qed.
 (** [] *)
 
 (** **** Exercise: 1 star (update_neq)  *)
@@ -1202,8 +1206,8 @@ Theorem update_neq :
   forall (d : partial_map) (m n : id) (o: nat),
     beq_id m n = false -> find m (update d n o) = find m d.
 Proof.
- (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros. simpl. rewrite -> H. reflexivity.
+Qed.
 
 End PartialMap.
 
@@ -1216,7 +1220,7 @@ Inductive baz : Type :=
 
 (** How _many_ elements does the type [baz] have?
 
-(* FILL IN HERE *)
+(* 0  *)
 *)
 (** [] *)
 
