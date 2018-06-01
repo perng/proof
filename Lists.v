@@ -1105,19 +1105,22 @@ Proof. reflexivity. Qed.
 Example test_hd_error3 : hd_error [5;6] = Some 5.
 Proof. reflexivity. Qed.
 
-(** [] *)
 
 (** **** Exercise: 1 star, optional (option_elim_hd)  *)
 (** This exercise relates your new [hd_error] to the old [hd]. *)
+<<<<<<< HEAD
 
 (** Definition option_elim_defaul (n : natoption): natoption :=
   Admitted.
 *)
+=======
+(**
+>>>>>>> 4a30fcb4ca46ce7fd6e710ad960994b451100605
 Theorem option_elim_hd : forall (l:natlist) (default:nat),
   hd default l = option_elim default (hd_error l).
 Proof.
-  
-  (* FILL IN HERE *) Admitted.
+  *)
+  (* FILL IN HERE *)
 (** [] *)
 
 End NatList.
@@ -1151,9 +1154,18 @@ Definition beq_id x1 x2 :=
 (** **** Exercise: 1 star (beq_id_refl)  *)
 Theorem beq_id_refl : forall x, true = beq_id x x.
 Proof.
+<<<<<<< HEAD
   intros. induction x. simpl. rewrite <- NatList.beq_self.   reflexivity.
 Qed.
   (** [] *)
+=======
+  intros. destruct x. simpl. induction n as [|n'].
+  - reflexivity.
+  - simpl. rewrite <- IHn'. reflexivity.
+Qed.
+(** [] *)
+>>>>>>> 4a30fcb4ca46ce7fd6e710ad960994b451100605
+
 
 (** Now we define the type of partial maps: *)
 
@@ -1197,17 +1209,29 @@ Fixpoint find (key : id) (d : partial_map) : natoption :=
 Theorem update_eq :
   forall (d : partial_map) (k : id) (v: nat),
     find k (update d k v) = Some v.
+<<<<<<< HEAD
 Proof. intros. simpl. rewrite <- beq_id_refl. reflexivity. Qed.
 
+=======
+Proof.
+  intros. simpl. rewrite <-  beq_id_refl. reflexivity.
+Qed.
+(** [] *)
+>>>>>>> 4a30fcb4ca46ce7fd6e710ad960994b451100605
 
 (** **** Exercise: 1 star (update_neq)  *)
 Theorem update_neq :
   forall (d : partial_map) (m n : id) (o: nat),
     beq_id m n = false -> find m (update d n o) = find m d.
 Proof.
+<<<<<<< HEAD
   intros. simpl. rewrite -> H. reflexivity. Qed.
 
 (** [] *)
+=======
+  intros. simpl. rewrite -> H. reflexivity.
+Qed.
+>>>>>>> 4a30fcb4ca46ce7fd6e710ad960994b451100605
 
 End PartialMap.
 
@@ -1220,7 +1244,7 @@ Inductive baz : Type :=
 
 (** How _many_ elements does the type [baz] have?
 
-(* FILL IN HERE *)
+(* 0  *)
 *)
 (** [] *)
 
