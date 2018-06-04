@@ -420,11 +420,14 @@ Theorem plus_n_n_injective : forall n m,
      n + n = m + m ->
      n = m.
 Proof.
-  intros. induction n as [| n'].
-  - induction m as [| m'].
-    simpl. reflexivity.
-    symmetry. apply IHm'.
-    (* FILL IN HERE *) Admitted.
+  intros n. induction n as [| n'].
+  - simpl. intros m eq. induction m as [| m'].
+    + reflexivity.
+    + rewrite <- plus_n_Sm in eq. inversion eq.
+  - intros m eq. rewrite <- plus_n_Sm in eq. rewrite -> plus_comm in eq. rewrite <- plus_n_Sm in eq. induction m as [| m'].
+     + simpl in eq.  inversion eq.
+     + apply f_equal. apply IHn'. rewrite <- plus_n_Sm in eq. inversion eq. reflexivity.
+Qed.
 (** [] *)
 
 (* ###################################################### *)
@@ -581,7 +584,14 @@ Proof.
 Theorem beq_nat_true : forall n m,
     beq_nat n m = true -> n = m.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros n. induction n.
+  - intros m eq.  inversion eq. destruct m.
+    + reflexivity.
+    + inversion H0.  
+  - intros m eq. inversion eq. destruct m.
+    + inversion H0.
+    + apply f_equal. apply IHn. assumption.
+Qed.
 (** [] *)
 
 (** **** Exercise: 2 stars, advanced (beq_nat_true_informal)  *)
@@ -706,7 +716,13 @@ Theorem nth_error_after_last: forall (n : nat) (X : Type) (l : list X),
      length l = n ->
      nth_error l n = None.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. generalize dependent n. induction l.
+  - simpl. intros. reflexivity.
+  - intros n eq. simpl. induction n.
+    + simpl. inversion eq.
+    + simpl.   apply IHl.  inversion eq.  reflexivity.
+Qed.       
+
 (** [] *)
 
 (** **** Exercise: 3 stars, optional (app_length_cons)  *)
@@ -718,8 +734,20 @@ Theorem app_length_cons : forall (X : Type) (l1 l2 : list X)
      length (l1 ++ (x :: l2)) = n ->
      S (length (l1 ++ l2)) = n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. generalize dependent n. induction l1.
+  - simpl. intros.  assumption.
+  - simpl. intros. destruct n.
+    + inversion H.
+    + apply f_equal. apply IHl1. inversion H.  rewrite -> H1.  reflexivity. 
+Qed. 
+
 (** [] *)
+
+Theorem length_app_sym : forall (X:Type) (l1 l2 : list X) (x:X) (n:nat),
+   length (l1 ++ l2) = n ->  length (l1 ++ (x::l2)) = S n.
+Proof.
+  intros X l1. induction l2. 
+
 
 (** **** Exercise: 4 stars, optional (app_length_twice)  *)
 (** Prove this by induction on [l], without using [app_length] from [Lists]. *)
@@ -728,8 +756,14 @@ Theorem app_length_twice : forall (X:Type) (n:nat) (l:list X),
      length l = n ->
      length (l ++ l) = n + n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. generalize dependent n. induction l.
+  + simpl. intros. rewrite <- H. reflexivity.
+  + simpl. intros. destruct n. 
+    - inversion H.
+    - simpl. apply f_equal. inversion H. rewrite -> H1.  rewrite <- plus_n_Sm. 
+ (* FILL IN HERE *) Admitted.
 (** [] *)
+
 
 (** **** Exercise: 3 stars, optional (double_induction)  *)
 (** Prove the following principle of induction over two naturals. *)
