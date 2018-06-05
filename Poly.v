@@ -372,7 +372,12 @@ Definition list123''' := [1; 2; 3].
 Theorem app_nil_r : forall (X:Type), forall l:list X,
   l ++ [] = l.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. induction l.
+  - reflexivity.
+  - simpl. rewrite -> IHl. reflexivity.
+Qed.    
+
+
 
 Theorem app_assoc : forall A (l m n:list A),
   l ++ m ++ n = (l ++ m) ++ n.
@@ -648,8 +653,9 @@ Proof. reflexivity.  Qed.
     and returns a list of just those that are even and greater than
     7. *)
 
-Definition filter_even_gt7 (l : list nat) : list nat :=
-  (* FILL IN HERE *) admit.
+Definition filter_even_gt7 (l : list nat) : list nat := admit.
+(**  filter (fun n => andb (evenb n) (bgt_nat n 7)) l. *)
+
 
 Example test_filter_even_gt7_1 :
   filter_even_gt7 [1;2;6;9;10;3;12;8] = [10;12;8].

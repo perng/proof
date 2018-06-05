@@ -1406,6 +1406,10 @@ Definition de_morgan_not_and_not := forall P Q:Prop,
 Definition implies_to_or := forall P Q:Prop,
   (P->Q) -> (~P\/Q).
 
+Theorem peirce_dowuble_neg_elim : peirce -> double_negation_elimination.
+Proof.
+  cbv. intros. specialize (H P False). apply H. intros. contradiction.
+Qed.
 (* FILL IN HERE *)
 (** [] *)
 

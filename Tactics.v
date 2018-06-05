@@ -420,11 +420,17 @@ Theorem plus_n_n_injective : forall n m,
      n + n = m + m ->
      n = m.
 Proof.
-  intros. induction n as [| n'].
-  - induction m as [| m'].
-    simpl. reflexivity.
-    symmetry. apply IHm'.
-    (* FILL IN HERE *) Admitted.
+  intros n. induction n as [| n'].
+  - intros m. destruct m as [| m'].
+    simpl.
+    reflexivity.    
+    simpl. intros H.
+    inversion H.
+  - intros m. destruct m as [| m'].
+    intros. rewrite <- plus_n_Sm in H.  inversion H.
+    intros. rewrite <- plus_n_Sm in H. rewrite <- plus_n_Sm in H.
+    inversion H. apply IHn' in H1. rewrite -> H1. reflexivity.
+Qed.    
 (** [] *)
 
 (* ###################################################### *)
@@ -441,7 +447,7 @@ Proof.
     Theorem double_injective: forall n m, 
       double n = double m -> n = m.
 
-    The way we _start_ this proof is a bit delicate: if we begin with
+    The way we _start_ this proof is a bit delicate: if we begin witah
 
       intros n. induction n.
 
@@ -580,8 +586,16 @@ Proof.
 (** **** Exercise: 2 stars (beq_nat_true)  *)
 Theorem beq_nat_true : forall n m,
     beq_nat n m = true -> n = m.
-Proof.
-  (* FILL IN HERE *) Admitted.
+Proof.  
+  intros n. induction n as  [|n'].
+  - destruct m as [|m'].    
+    reflexivity.
+    intros H. inversion H.
+  - destruct m as [|m'].    
+    + intros H.
+      inversion H.
+    +   intros eq. apply IHn' in eq. rewrite -> eq. reflexivity.
+Qed.
 (** [] *)
 
 (** **** Exercise: 2 stars, advanced (beq_nat_true_informal)  *)
