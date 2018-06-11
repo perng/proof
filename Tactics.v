@@ -762,9 +762,12 @@ Qed.
 Theorem length_app_sym : forall (X:Type) (l1 l2 : list X) (x:X) (n:nat),
    length (l1 ++ l2) = n ->  length (l1 ++ (x::l2)) = S n.
 Proof.
-  intros X l1. induction l2. 
-
-
+  intros X l1. induction l1.
+  - simpl. intros. apply f_equal. assumption. 
+  - intros. simpl. apply f_equal. destruct n. 
+    + inversion H.
+    + apply IHl1. inversion H. reflexivity.
+Qed. 
 (** **** Exercise: 4 stars, optional (app_length_twice)  *)
 (** Prove this by induction on [l], without using [app_length] from [Lists]. *)
 
@@ -774,9 +777,10 @@ Theorem app_length_twice : forall (X:Type) (n:nat) (l:list X),
 Proof.
   intros. generalize dependent n. induction l.
   + simpl. intros. rewrite <- H. reflexivity.
-  + simpl. intros. destruct n. 
+  + simpl. intros. induction n. 
     - inversion H.
-    - simpl. apply f_equal. inversion H. rewrite -> H1.  rewrite <- plus_n_Sm. 
+    - simpl.   apply f_equal. inversion H.  apply IHl in H1.  rewrite -> H. 
+ 
  (* FILL IN HERE *) Admitted.
 (** [] *)
 
@@ -791,7 +795,14 @@ Theorem double_induction: forall (P : nat -> nat -> Prop),
   (forall m n, P m n -> P (S m) (S n)) ->
   forall m n, P m n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. induction m.
+  + induction n. 
+    - assumption.
+    - apply H1. assumption.
+  + induction n.
+    - apply H0. assumption.
+    - 
+(* FILL IN HERE *) Admitted.
 (** [] *)
 
 (* ###################################################### *)
