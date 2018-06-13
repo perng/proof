@@ -230,7 +230,8 @@ Proof.
 Lemma proj2 : forall P Q : Prop,
   P /\ Q -> Q.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. destruct H. assumption. 
+Qed. 
 (** [] *)
 
 (** Finally, we sometimes need to rearrange the order of conjunctions
@@ -256,8 +257,10 @@ Proof.
 Theorem and_assoc : forall P Q R : Prop,
   P /\ (Q /\ R) -> (P /\ Q) /\ R.
 Proof.
-  intros P Q R [HP [HQ HR]].
-(* FILL IN HERE *) Admitted.
+  intros P Q R [HP [HQ HR]].  
+  split. split.  assumption. assumption. assumption.
+Qed.  
+
 (** [] *)
 
 (** By the way, the infix notation [/\] is actually just syntactic
@@ -326,14 +329,21 @@ Qed.
 Lemma mult_eq_0 :
   forall n m, n * m = 0 -> n = 0 \/ m = 0.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  induction n, m.
+  - simpl. intros. left. reflexivity.
+  - intros. left. reflexivity.
+  - intros. right. reflexivity.
+  - intros.   left. inversion H.
+Qed.     
+
 (** [] *)
 
 (** **** Exercise: 1 star (or_commut)  *)
 Theorem or_commut : forall P Q : Prop,
   P \/ Q  -> Q \/ P.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. destruct H. right. assumption. left. assumption. Qed. 
+
 (** [] *)
 
 (** ** Falsehood and Negation *)
@@ -387,7 +397,8 @@ Proof.
 Fact not_implies_our_not : forall (P:Prop),
   ~ P -> (forall (Q:Prop), P -> Q).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. destruct H. assumption. Qed. 
+
 (** [] *)
 
 (** This is how we use [not] to state that [0] and [1] are different
@@ -448,14 +459,17 @@ Proof.
 Theorem contrapositive : forall P Q : Prop,
   (P -> Q) -> (~Q -> ~P).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. unfold not. intros. apply H in H1. destruct H0. assumption.
+Qed. 
 (** [] *)
 
 (** **** Exercise: 1 star (not_both_true_and_false)  *)
 Theorem not_both_true_and_false : forall P : Prop,
   ~ (P /\ ~P).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. unfold not. intros. destruct H. apply H0. assumption. 
+Qed. 
+
 (** [] *)
 
 (** **** Exercise: 1 star, advanced (informal_not_PNP)  *)
@@ -558,19 +572,27 @@ Qed.
 Theorem iff_refl : forall P : Prop,
   P <-> P.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. split. intros. assumption. intros. assumption.
+Qed.   
+
 
 Theorem iff_trans : forall P Q R : Prop,
   (P <-> Q) -> (Q <-> R) -> (P <-> R).
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros P Q R [H11 H12] [H21 H22]. split. intros.  apply H21. apply H11. assumption. 
+  intros. apply H12. apply H22. assumption.
+Qed.   
+  (** [] *)
 
 (** **** Exercise: 3 stars (or_distributes_over_and)  *)
 Theorem or_distributes_over_and : forall P Q R : Prop,
   P \/ (Q /\ R) <-> (P \/ Q) /\ (P \/ R).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. split.
+  -  intros. destruct H. split. left. assumption. left. assumption. destruct H. split. 
+     right. assumption.  right. assumption.
+  - intros. destruct H.  destruct H. left. assumption. destruct H0. left. assumption. right. split. assumption.  assumption.
+Qed.     
 (** [] *)
 
 (** Some of Coq's tactics treat [iff] statements specially, avoiding
