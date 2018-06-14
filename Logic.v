@@ -807,7 +807,18 @@ Qed.
 Lemma in_app_iff : forall A l l' (a:A),
   In a (l++l') <-> In a l \/ In a l'.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. split.
+  - intros. induction l,  l'.
+    + simpl in H. destruct H.
+    + simpl in H. destruct H. right. rewrite <- H. simpl. left. reflexivity. right. simpl. right. assumption.
+    + simpl in H.    rewrite app_nil_r in H. rewrite app_nil_r in IHl. left. simpl. assumption.
+    + simpl in H.  destruct H. left.  rewrite H. simpl. left. reflexivity. destruct IHl. assumption. left. simpl. right. assumption. destruct H0. right. rewrite H0. simpl. left. reflexivity.
+      right. simpl. right. assumption.
+  - intros [H1 | H2].
+    + induction l. destruct H1. simpl. destruct H1. left. assumption. apply IHl in H. right.  apply H.
+    + induction l. simpl. assumption. simpl. right. assumption.
+Qed.       
+
 (** [] *)
 
 (** **** Exercise: 3 stars (All)  *)
