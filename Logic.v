@@ -832,16 +832,29 @@ Qed.
     lemma below.  (Of course, your definition should _not_ just
     restate the left-hand side of [All_In].) *)
 
-Fixpoint All {T} (P : T -> Prop) (l : list T) : Prop :=
-  (* FILL IN HERE *) admit.
+Fixpoint All {T: Type} (P : T -> Prop) (l : list T) : Prop :=
+  match l with
+  | [] => True
+  | x' :: l' => (P x') /\ All P l'
+  end.
+
+
 
 Lemma All_In :
   forall T (P : T -> Prop) (l : list T),
     (forall x, In x l -> P x) <->
     All P l.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros. split.
+  + intros. induction l.
+    - simpl. reflexivity.
+    - simpl. split. apply H. simpl. left. reflexivity. apply IHl. intros. apply H. simpl. right. apply H0.
+  + intros.  induction l.
+    -  destruct H0.
+    -  destruct H0. simpl in H. destruct H. rewrite <- H0.  assumption.  apply IHl. simpl in H. destruct H. assumption. assumption.
+Qed.        
+       
+
 
 (** **** Exercise: 3 stars (combine_odd_even)  *)
 (** Complete the definition of the [combine_odd_even] function below.
