@@ -864,17 +864,30 @@ Qed.
     otherwise. *)
 
 Definition combine_odd_even (Podd Peven : nat -> Prop) : nat -> Prop :=
-  (* FILL IN HERE *) admit.
+  fun (n: nat) => match (oddb n) with
+                  | true  =>  (Podd n)
+                  | false => (Peven n)
+                  end.
+
+
+Print oddb.
+Print evenb.
 
 (** To test your definition, prove the following facts: *)
-
+  
 Theorem combine_odd_even_intro :
   forall (Podd Peven : nat -> Prop) (n : nat),
     (oddb n = true -> Podd n) ->
     (oddb n = false -> Peven n) ->
     combine_odd_even Podd Peven n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros P Q n h1 h2. unfold combine_odd_even. destruct (Nat.even n).
+  + rewrite h1. reflexivity.
+  + apply h1.   
+  + apply H0. unfold oddb. simpl. reflexivity.
+  + simpl. 
+  
+(* FILL IN HERE *) Admitted.
 
 Theorem combine_odd_even_elim_odd :
   forall (Podd Peven : nat -> Prop) (n : nat),
