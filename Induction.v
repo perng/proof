@@ -119,17 +119,39 @@ Proof.
 Theorem mult_0_r : forall n:nat,
   n * 0 = 0.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  induction n.
+  + reflexivity.
+  + simpl. assumption.
+Qed. 
+
+
+Lemma plus1_S_equiv : forall n:nat, S n = n+1.
+Proof.
+  intros. induction n. 
+  + reflexivity.
+  + simpl. rewrite <- IHn. reflexivity.
+Qed. 
 
 Theorem plus_n_Sm : forall n m : nat, 
   S (n + m) = n + (S m).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  induction n.
+  + simpl. reflexivity.
+  + intros. simpl. rewrite <- IHn. reflexivity. 
+Qed. 
+
+
 
 Theorem plus_comm : forall n m : nat,
   n + m = m + n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. induction n.
+  + simpl. induction m.
+    - reflexivity.
+    - simpl. rewrite <- IHm. reflexivity.
+  + rewrite <-  plus_n_Sm. simpl. rewrite IHn. reflexivity.      
+Qed. 
+
 
 Theorem plus_assoc : forall n m p : nat,
   n + (m + p) = (n + m) + p.
