@@ -881,21 +881,21 @@ Theorem combine_odd_even_intro :
     (oddb n = false -> Peven n) ->
     combine_odd_even Podd Peven n.
 Proof.
-  intros P Q n h1 h2. unfold combine_odd_even. destruct (Nat.even n).
-  + rewrite h1. reflexivity.
-  + apply h1.   
-  + apply H0. unfold oddb. simpl. reflexivity.
-  + simpl. 
+  intros P Q n h1 h2. unfold combine_odd_even. 
+  destruct (oddb n). 
+    - apply h1.  reflexivity. 
+    - apply h2.  reflexivity.
+Qed. 
   
-(* FILL IN HERE *) Admitted.
-
 Theorem combine_odd_even_elim_odd :
   forall (Podd Peven : nat -> Prop) (n : nat),
     combine_odd_even Podd Peven n ->
     oddb n = true ->
     Podd n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. unfold combine_odd_even in H. destruct (oddb n).
+  assumption. exfalso. inversion H0.
+Qed.   
 
 Theorem combine_odd_even_elim_even :
   forall (Podd Peven : nat -> Prop) (n : nat),
@@ -903,7 +903,9 @@ Theorem combine_odd_even_elim_even :
     oddb n = false ->
     Peven n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  unfold combine_odd_even in H. destruct (oddb n). inversion H0. assumption.
+Qed.   
 (** [] *)
 
 (* #################################################################### *)
