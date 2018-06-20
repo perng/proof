@@ -334,22 +334,36 @@ Qed.
 Theorem leb_refl : forall n:nat,
   true = leb n n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. induction n.
+  + simpl.  reflexivity.
+  + simpl. assumption.
+Qed.     
+
 
 Theorem zero_nbeq_S : forall n:nat,
   beq_nat 0 (S n) = false.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  induction n.
+  + reflexivity.
+  + simpl. reflexivity.
+Qed.     
+
 
 Theorem andb_false_r : forall b : bool,
   andb b false = false.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. simpl. destruct b. reflexivity. reflexivity.
+Qed.   
+
 
 Theorem plus_ble_compat_l : forall n m p : nat,
   leb n m = true -> leb (p + n) (p + m) = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. induction p.
+  + simpl. assumption.
+  + simpl. assumption.
+Qed.     
+
 
 Theorem S_nbeq_0 : forall n:nat,
   beq_nat (S n) 0 = false.
