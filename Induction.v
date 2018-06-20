@@ -3,7 +3,9 @@
 (** First, we import all of our definitions from the previous
     chapter. *)
 
+Require Import Arith.
 Require Export Basics.
+
 
 (** For the [Require Export] to work, you first need to use
     [coqc] to compile [Basics.v] into [Basics.vo].  This is like
@@ -307,8 +309,18 @@ Qed.
 Theorem mult_comm : forall m n : nat,
   m * n = n * m.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros. induction  n.
+  + simpl. induction m.
+    - reflexivity.
+    - simpl. assumption. 
+  + simpl mult. rewrite <- IHn.
+     pattern m at 2. 
+    assert (mult_x_1 : forall x, x = x * 1).
+    - induction x. reflexivity. simpl.  rewrite <- IHx. reflexivity.
+    - rewrite mult_x_1 with (x := m).  
+      rewrite <- mult_plus_distr_l.  simpl. reflexivity. 
+Qed.
+      (** [] *)
 
 (** **** Exercise: 3 stars, optional (more_exercises)  *)
 (** Take a piece of paper.  For each of the following theorems, first
