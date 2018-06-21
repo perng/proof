@@ -1291,7 +1291,15 @@ Qed.
 Lemma orb_true_iff : forall b1 b2,
   b1 || b2 = true <-> b1 = true \/ b2 = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. split. destruct b1.
+  +  simpl. intros. left. reflexivity.
+  + intros.  destruct b2.
+    - right. reflexivity. 
+    - destruct H.  simpl.  left.  reflexivity.
+      + intros. destruct H. rewrite H. simpl. reflexivity. rewrite H. simpl. destruct b1.  simpl. reflexivity. simpl. reflexivity.
+Qed.         
+     -   
+
 (** [] *)
 
 (** **** Exercise: 1 star (beq_nat_false_iff)  *)
