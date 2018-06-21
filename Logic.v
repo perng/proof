@@ -881,10 +881,9 @@ Theorem combine_odd_even_intro :
     (oddb n = false -> Peven n) ->
     combine_odd_even Podd Peven n.
 Proof.
-  intros P Q n h1 h2. unfold combine_odd_even. 
-  destruct (oddb n). 
-    - apply h1.  reflexivity. 
-    - apply h2.  reflexivity.
+  intros P Q n h1 h2. unfold combine_odd_even. destruct (oddb n).
+  + apply h1. reflexivity.
+  + apply h2. reflexivity.
 Qed. 
   
 Theorem combine_odd_even_elim_odd :
@@ -903,9 +902,11 @@ Theorem combine_odd_even_elim_even :
     oddb n = false ->
     Peven n.
 Proof.
-  intros.
-  unfold combine_odd_even in H. destruct (oddb n). inversion H0. assumption.
-Qed.   
+  intros. unfold combine_odd_even in H. destruct (oddb n).
+  + inversion H0.
+  + assumption.
+Qed.    
+
 (** [] *)
 
 (* #################################################################### *)
@@ -1273,7 +1274,13 @@ Proof. apply even_bool_prop. reflexivity. Qed.
 Lemma andb_true_iff : forall b1 b2:bool,
   b1 && b2 = true <-> b1 = true /\ b2 = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. split.
+  intros.
+  + split. destruct b1. reflexivity. destruct H. reflexivity.
+    destruct b1. destruct H. simpl.  reflexivity.  simpl in H. inversion H.
+  + intros. destruct H. rewrite H. rewrite H0. reflexivity.
+Qed.     
+
 
 Lemma orb_true_iff : forall b1 b2,
   b1 || b2 = true <-> b1 = true \/ b2 = true.
@@ -1466,7 +1473,8 @@ Theorem not_exists_dist :
   forall (X:Type) (P : X -> Prop),
     ~ (exists x, ~ P x) -> (forall x, P x).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  
+(* FILL IN HERE *) Admitted.
 (** [] *)
 
 (** **** Exercise: 5 stars, advanced, optional (classical_axioms)  *)

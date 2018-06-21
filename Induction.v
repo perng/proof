@@ -3,7 +3,9 @@
 (** First, we import all of our definitions from the previous
     chapter. *)
 
+Require Import Arith.
 Require Export Basics.
+
 
 (** For the [Require Export] to work, you first need to use
     [coqc] to compile [Basics.v] into [Basics.vo].  This is like
@@ -119,22 +121,47 @@ Proof.
 Theorem mult_0_r : forall n:nat,
   n * 0 = 0.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  induction n.
+  + reflexivity.
+  + simpl. assumption.
+Qed. 
+
+
+Lemma plus1_S_equiv : forall n:nat, S n = n+1.
+Proof.
+  intros. induction n. 
+  + reflexivity.
+  + simpl. rewrite <- IHn. reflexivity.
+Qed. 
 
 Theorem plus_n_Sm : forall n m : nat, 
   S (n + m) = n + (S m).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  induction n.
+  + simpl. reflexivity.
+  + intros. simpl. rewrite <- IHn. reflexivity. 
+Qed. 
+
+
 
 Theorem plus_comm : forall n m : nat,
   n + m = m + n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. induction n.
+  + simpl. induction m.
+    - reflexivity.
+    - simpl. rewrite <- IHm. reflexivity.
+  + rewrite <-  plus_n_Sm. simpl. rewrite IHn. reflexivity.      
+Qed. 
+
 
 Theorem plus_assoc : forall n m p : nat,
   n + (m + p) = (n + m) + p.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. induction n.
+  + simpl.  reflexivity.
+  + simpl. rewrite IHn. reflexivity. 
+Qed. 
 (** [] *)
 
 (** **** Exercise: 2 stars (double_plus)  *)
@@ -150,7 +177,12 @@ Fixpoint double (n:nat) :=
 
 Lemma double_plus : forall n, double n = n + n .
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  induction n.
+  + reflexivity.
+  + simpl. rewrite IHn. rewrite plus_n_Sm. reflexivity.
+Qed.     
+
 (** [] *)
 
 (** **** Exercise: 2 stars, optional (evenb_S)  *)
@@ -163,7 +195,16 @@ Proof.
 Theorem evenb_S : forall n : nat,
   evenb (S n) = negb (evenb n).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. 
+  induction n. 
+  + simpl. reflexivity.
+  + rewrite IHn. simpl.
+    assert (H: forall x, negb (negb x) = x).
+    intros. induction x.
+    - reflexivity.
+    - reflexivity.
+    - rewrite H.  reflexivity.   
+
 (** [] *)
 
 (** **** Exercise: 1 star (destruct_induction)  *)
@@ -257,9 +298,10 @@ Proof.
 Theorem plus_swap : forall n m p : nat,
   n + (m + p) = m + (n + p).
 Proof.
-  (* FILL IN HERE *) Admitted.
-
-(** Now prove commutativity of multiplication.  (You will probably
+  intros.  rewrite plus_assoc.
+  rewrite plus_assoc.  rewrite (plus_comm n m). reflexivity. 
+Qed. 
+  (** Now prove commutativity of multiplication.  (You will probably
     need to define and prove a separate subsidiary theorem to be used
     in the proof of this one.  You may find that [plus_swap] comes in
     handy.) *)
@@ -267,8 +309,18 @@ Proof.
 Theorem mult_comm : forall m n : nat,
   m * n = n * m.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros. induction  n.
+  + simpl. induction m.
+    - reflexivity.
+    - simpl. assumption. 
+  + simpl mult. rewrite <- IHn.
+     pattern m at 2. 
+    assert (mult_x_1 : forall x, x = x * 1).
+    - induction x. reflexivity. simpl.  rewrite <- IHx. reflexivity.
+    - rewrite mult_x_1 with (x := m).  
+      rewrite <- mult_plus_distr_l.  simpl. reflexivity. 
+Qed.
+      (** [] *)
 
 (** **** Exercise: 3 stars, optional (more_exercises)  *)
 (** Take a piece of paper.  For each of the following theorems, first
@@ -282,22 +334,36 @@ Proof.
 Theorem leb_refl : forall n:nat,
   true = leb n n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. induction n.
+  + simpl.  reflexivity.
+  + simpl. assumption.
+Qed.     
+
 
 Theorem zero_nbeq_S : forall n:nat,
   beq_nat 0 (S n) = false.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  induction n.
+  + reflexivity.
+  + simpl. reflexivity.
+Qed.     
+
 
 Theorem andb_false_r : forall b : bool,
   andb b false = false.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. simpl. destruct b. reflexivity. reflexivity.
+Qed.   
+
 
 Theorem plus_ble_compat_l : forall n m p : nat,
   leb n m = true -> leb (p + n) (p + m) = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. induction p.
+  + simpl. assumption.
+  + simpl. assumption.
+Qed.     
+
 
 Theorem S_nbeq_0 : forall n:nat,
   beq_nat (S n) 0 = false.
