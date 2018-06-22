@@ -1298,7 +1298,7 @@ Proof.
     - destruct H.  simpl.  left.  reflexivity.
       + intros. destruct H. rewrite H. simpl. reflexivity. rewrite H. simpl. destruct b1.  simpl. reflexivity. simpl. reflexivity.
 Qed.         
-     -   
+
 
 (** [] *)
 
@@ -1310,10 +1310,15 @@ Qed.
 Theorem beq_nat_false_iff : forall x y : nat,
   beq_nat x y = false <-> x <> y.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros. split.
+  + intros h1 h2.
+    rewrite h2 in h1.rewrite <- beq_nat_refl in h1. inversion h1.
+  + intros h1. destruct (beq_nat x y) eqn:x_eq_y.
+    - apply beq_nat_true in x_eq_y. elim h1. assumption. 
+    - reflexivity. 
+Qed. 
 
-(** **** Exercise: 3 stars (beq_list)  *)
+( Exercise: 3 stars (beq_list)  *)
 (** Given a boolean operator [beq] for testing equality of elements of
     some type [A], we can define a function [beq_list beq] for testing
     equality of lists with elements in [A].  Complete the definition
