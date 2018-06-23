@@ -892,12 +892,9 @@ Theorem combine_odd_even_elim_odd :
     oddb n = true ->
     Podd n.
 Proof.
-  unfold combine_odd_even. 
-  intros. destruct (oddb n).
-  + assumption.
-  + inversion H0.    
-Qed. 
-
+  intros. unfold combine_odd_even in H. destruct (oddb n).
+  assumption. exfalso. inversion H0.
+Qed.   
 
 Theorem combine_odd_even_elim_even :
   forall (Podd Peven : nat -> Prop) (n : nat),
@@ -1163,8 +1160,14 @@ Theorem evenb_double_conv : forall n,
   exists k, n = if evenb n then double k
                 else S (double k).
 Proof.
+  intros. induction n.
+  + simpl. exists 0. reflexivity.
+  +  rewrite evenb_S. destruct (evenb n).
+  - simpl. destruct IHn as [x IHn]. rewrite  IHn. exists x.   reflexivity.
+  - simpl. destruct IHn as [x IHn]. rewrite IHn.  exists (S x).  simpl. reflexivity.
+Qed.     
   (* Hint: Use the [evenb_S] lemma from [Induction.v]. *)
-  (* FILL IN HERE *) Admitted.
+
 (** [] *)
 
 Theorem even_bool_prop : forall n,
@@ -1288,7 +1291,15 @@ Qed.
 Lemma orb_true_iff : forall b1 b2,
   b1 || b2 = true <-> b1 = true \/ b2 = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. split. destruct b1.
+  +  simpl. intros. left. reflexivity.
+  + intros.  destruct b2.
+    - right. reflexivity. 
+    - destruct H.  simpl.  left.  reflexivity.
+      + intros. destruct H. rewrite H. simpl. reflexivity. rewrite H. simpl. destruct b1.  simpl. reflexivity. simpl. reflexivity.
+Qed.         
+
+
 (** [] *)
 
 (** **** Exercise: 1 star (beq_nat_false_iff)  *)
@@ -1299,10 +1310,15 @@ Proof.
 Theorem beq_nat_false_iff : forall x y : nat,
   beq_nat x y = false <-> x <> y.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros. split.
+  + intros h1 h2.
+    rewrite h2 in h1. rewrite <- beq_nat_refl in h1. inversion h1.
+  + intros h1. destruct (beq_nat x y) eqn:x_eq_y.
+    - apply beq_nat_true in x_eq_y. elim h1. assumption. 
+    - reflexivity. 
+Qed. 
 
-(** **** Exercise: 3 stars (beq_list)  *)
+(** Exercise: 3 stars (beq_list)  *)
 (** Given a boolean operator [beq] for testing equality of elements of
     some type [A], we can define a function [beq_list beq] for testing
     equality of lists with elements in [A].  Complete the definition
@@ -1310,14 +1326,69 @@ Proof.
     definition is correct, prove the lemma [beq_list_true_iff]. *)
 
 Fixpoint beq_list {A} (beq : A -> A -> bool)
-                  (l1 l2 : list A) : bool :=
-  (* FILL IN HERE *) admit.
+(l1 l2 : list A) : bool :=
+    match l1 with
+    | nil => match l2  with
+             | nil => true
+             | t2::l2 => false
+             end              
+    | h1 :: t1 =>
+      match l2 with
+      | nil => false
+      | h2 :: t2 => (beq h1 h2) && (beq_list beq t1 t2)
+      end
+    end.
+
 
 Lemma beq_list_true_iff :
   forall A (beq : A -> A -> bool),
     (forall a1 a2, beq a1 a2 = true <-> a1 = a2) ->
     forall l1 l2, beq_list beq l1 l2 = true <-> l1 = l2.
 Proof.
+ (**  intros A beq h1.
+  induction l1 as [|a l1].
+  + induction l2 as [|b l2].
+    - split; reflexivity.
+    - split;  intros h2; inversion h2.
+  + induction l2 as [|b l2].
+    - split; inversion 1.
+    - simpl; split.
+      * intros h2.
+        apply andb_true_iff in h2.
+        destruct h2 as [h2 h3].
+        apply h1 in h2.
+        apply IHl1 in h3.
+        rewrite h2; rewrite h3; reflexivity.
+      * intros h2.
+        apply andb_true_iff.
+        injection h2 as h2 h3.
+        rewrite h2; rewrite <- h3.
+        split; [apply h1 | apply IHl1]; reflexivity.
+  *)
+  
+  intros. induction l1. 
+  + induction l2.
+  - simpl. split;  intros. reflexivity. reflexivity.
+  - simpl. split.
+    * intros. inversion H0.
+    * intros. inversion H0.
+  + induction l2. split; split. 
+    - intros. inversion H0.
+    - intros. inversion H0.
+    - split.
+      * intros. inversion H0. apply andb_true_iff in H2. destruct H2. apply H in H1. rewrite H1.
+        destruct H0. injuection H2. 
+      
+    reflexivity.     intros. induction l1.
+    - induction l2. 
+      *  reflexivity.
+      * inversion H0.    
+    - induction l2.
+      * inversion 1.  destruct H0. inversion H0.
+    - inversion H0.
+    - inversion H0. rewrite andb_true_iff in H2.  destruct H2.  apply H in H1. rewrite H1.
+      
+      destruct H2. 
 (* FILL IN HERE *) Admitted.
 (** [] *)
 
