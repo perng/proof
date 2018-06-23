@@ -1345,7 +1345,7 @@ Lemma beq_list_true_iff :
     (forall a1 a2, beq a1 a2 = true <-> a1 = a2) ->
     forall l1 l2, beq_list beq l1 l2 = true <-> l1 = l2.
 Proof.
- (**  intros A beq h1.
+  intros A beq h1.
   induction l1 as [|a l1].
   + induction l2 as [|b l2].
     - split; reflexivity.
@@ -1361,16 +1361,18 @@ Proof.
         rewrite h2; rewrite h3; reflexivity.
       * intros h2.
         apply andb_true_iff.
-        injection h2 as h2 h3.
-        rewrite h2; rewrite <- h3.
-        split; [apply h1 | apply IHl1]; reflexivity.
-  *)
-  
+        injection h2 as h3 h4.
+        split. rewrite h1. assumption.
+        rewrite -> IHl1.  assumption. 
+ (**
   intros. induction l1. 
   + induction l2.
-  - simpl. split;  intros. reflexivity. reflexivity.
-  - simpl. split.
-    * intros. inversion H0.
+    - simpl. split;  intros; reflexivity. 
+    - simpl. split; intros; inversion H0.
+  + induction l2 as [|b l2]. 
+    - split. inversion 1.  intros; inversion H0.
+    - simpl. split.      
+      * intros. apply andb_true_iff in H0.  destruct H0.  apply H in H0. rewrite H0. 
     * intros. inversion H0.
   + induction l2. split; split. 
     - intros. inversion H0.
@@ -1389,7 +1391,8 @@ Proof.
     - inversion H0. rewrite andb_true_iff in H2.  destruct H2.  apply H in H1. rewrite H1.
       
       destruct H2. 
-(* FILL IN HERE *) Admitted.
+*)
+
 (** [] *)
 
 (** **** Exercise: 2 stars, recommended (All_forallb)  *)
@@ -1411,8 +1414,11 @@ Proof.
   intros. split. 
   + intros.  induction l.
     - simpl. reflexivity.
-    - simpl. destruct (test x). split. reflexivity. apply IHl. simpl in H. rewrite proj1 in H. destruct andb in H.  destruct H.  destruct H. simpl. destruct (test x).  unfol  in H. 
-  (* FILL IN HERE *) Admitted.
+    - simpl.  simpl in H. rewrite  andb_true_iff in H. destruct H.  split. assumption.  apply IHl.  assumption.
+  + intros. induction l.
+    - reflexivity.
+    - simpl.  simpl in H. rewrite andb_true_iff. destruct H. split. assumption. apply IHl. assumption.
+Qed.
 
 (** Are there any important properties of the function [forallb] which
     are not captured by your specification? *)
@@ -1531,8 +1537,10 @@ Qed.
 Theorem excluded_middle_irrefutable:  forall (P:Prop),
   ~ ~ (P \/ ~ P).
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  unfold not.
+  intros. apply H. right. intros. apply H. left. assumption. 
+Qed. 
+  (** [] *)
 
 (** **** Exercise: 3 stars, optional (not_exists_dist)  *)
 (** It is a theorem of classical logic that the following two
@@ -1551,8 +1559,11 @@ Theorem not_exists_dist :
   forall (X:Type) (P : X -> Prop),
     ~ (exists x, ~ P x) -> (forall x, P x).
 Proof.
+  cbv. intros em X P h2 x. destruct  (em (P x)). assumption. elim h2.
+  exists x.  assumption.
+Qed.   
   
-(* FILL IN HERE *) Admitted.
+
 (** [] *)
 
 (** **** Exercise: 5 stars, advanced, optional (classical_axioms)  *)
@@ -1585,7 +1596,8 @@ Qed.
 
 Theorem double_negation_elimination_de_morgan_not_and_not: double_negation_elimination -> de_morgan_not_and_not.
 Proof.
-  cbv.  intros.   specialize (H  False).  destruct H.   intros.   destruct H.  destruct H0.   contradiction.  apply H. intros. apply H1. speci
+  cbv.  intros.  elim H0.  destruct H0.  split. intros.  apply H in H1. induction Q.    left. apply H. intros.  destruct H0.  apply specialize (H  False).    simpl in H.  destruct (P x).   intros.
+   apply H0. destruct H.   destruct H0.   split.  contradiction.  apply H. intros. apply H1. speci
   - 
 
 (* FILL IN HERE *)
