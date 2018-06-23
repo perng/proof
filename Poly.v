@@ -382,12 +382,21 @@ Qed.
 Theorem app_assoc : forall A (l m n:list A),
   l ++ m ++ n = (l ++ m) ++ n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. induction l.
+  + simpl. reflexivity.
+  + simpl. rewrite IHl. reflexivity.
+Qed.     
+
 
 Lemma app_length : forall (X:Type) (l1 l2 : list X),
   length (l1 ++ l2) = length l1 + length l2.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  induction l1.
+  + simpl. reflexivity.
+  + simpl. rewrite IHl1. reflexivity.
+Qed.    
+
 (** [] *)
 
 (** **** Exercise: 2 stars, optional (more_poly_exercises)  *)
