@@ -1589,18 +1589,37 @@ Definition de_morgan_not_and_not := forall P Q:Prop,
 Definition implies_to_or := forall P Q:Prop,
   (P->Q) -> (~P\/Q).
 
-Theorem peirce_dowuble_neg_elim : peirce -> double_negation_elimination.
+Theorem peirce_double_neg_elim : peirce -> double_negation_elimination.
 Proof.
   cbv. intros. specialize (H P False). apply H. intros. contradiction.
 Qed.
 
 Theorem double_negation_elimination_de_morgan_not_and_not: double_negation_elimination -> de_morgan_not_and_not.
-Proof.
-  cbv.  intros.  elim H0.  destruct H0.  split. intros.  apply H in H1. induction Q.    left. apply H. intros.  destruct H0.  apply specialize (H  False).    simpl in H.  destruct (P x).   intros.
-   apply H0. destruct H.   destruct H0.   split.  contradiction.  apply H. intros. apply H1. speci
-  - 
+Proof. 
+  intros dne P Q H.  red in dne.
+   apply dne.  intro H2. apply H.
+   split. intro H3. apply H2. left. assumption.  intro H3.   apply H2. right. assumption.
+Qed. 
 
-(* FILL IN HERE *)
+Theorem de_morgan_not_and_not_implies_to_or:
+  de_morgan_not_and_not -> implies_to_or.
+Proof. 
+  intros dm P Q H. red in dm. apply dm.  hnf.  intros [nnp nq].
+  apply nnp. intro H2. apply H in H2.  contradiction.
+Qed.
+
+Theorem implies_to_or_excluded_middle: implies_to_or -> excluded_middle.
+Proof.
+  intros.  red. intros. red in H. specialize (H (P) P).
+  rewrite or_comm.
+  apply H.  intros. assumption. 
+Qed. 
+
+Theorem excluded_middle_peirce : excluded_middle -> peirce.
+Proof.
+  cbv. intros em P Q H.  destruct (em P) as [p|np].
+  assumption. apply H. intros. contradiction.
+Qed.   
 (** [] *)
 
 (** $Date: 2015-08-11 12:03:04 -0400 (Tue, 11 Aug 2015) $ *)
