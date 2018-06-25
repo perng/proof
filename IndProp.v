@@ -15,7 +15,7 @@ Require Export Logic.
     double k].  Yet another possibility is to say that [n] is even if
     we can establish its evenness from the following rules:
 
-       - Rule [ev_0]: The number [0] is even.
+       - Rule [ev_0]: The number [0] is even. 
        - Rule [ev_SS]: If [n] is even, then [S (S n)] is even.
 
     To illustrate how this new definition of evenness works, let's use

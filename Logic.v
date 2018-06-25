@@ -1,7 +1,7 @@
 (** * Logic: Logic in Coq *)
 
 Require Export Tactics.
-Require Peano.
+
 
 (** In previous chapters, we have seen many examples of factual
     claims (_propositions_) and ways of presenting evidence of their
@@ -246,7 +246,8 @@ Proof.
   intros P Q [HP HQ].
   split.
     - (* left *) apply HQ.
-    - (* right *) apply HP.  Qed.
+    - (* right *) apply HP.
+Qed.
   
 (** **** Exercise: 2 stars (and_assoc)  *)
 (** (In the following proof of associativity, notice how the _nested_
@@ -342,7 +343,8 @@ Qed.
 Theorem or_commut : forall P Q : Prop,
   P \/ Q  -> Q \/ P.
 Proof.
-  intros. destruct H. right. assumption. left. assumption. Qed. 
+  intros. destruct H. right. assumption. left. assumption.
+Qed. 
 
 (** [] *)
 
@@ -384,7 +386,8 @@ Theorem ex_falso_quodlibet : forall (P:Prop),
 Proof.
   (* WORKED IN CLASS *)
   intros P contra.
-  destruct contra.  Qed.
+  destruct contra.
+Qed.
 
 (** The Latin _ex falso quodlibet_ means, literally, "from falsehood
     follows whatever you like"; this is another common name for the
@@ -397,7 +400,8 @@ Proof.
 Fact not_implies_our_not : forall (P:Prop),
   ~ P -> (forall (Q:Prop), P -> Q).
 Proof.
-  intros. destruct H. assumption. Qed. 
+  intros. destruct H. assumption.
+Qed. 
 
 (** [] *)
 
@@ -430,20 +434,23 @@ Qed.
 Theorem not_False :
   ~ False.
 Proof.
-  unfold not. intros H. destruct H. Qed.
+  unfold not. intros H. destruct H.
+Qed.
 
 Theorem contradiction_implies_anything : forall P Q : Prop,
   (P /\ ~P) -> Q.
 Proof.
   (* WORKED IN CLASS *)
   intros P Q [HP HNA]. unfold not in HNA.
-  apply HNA in HP. destruct HP.  Qed.
+  apply HNA in HP. destruct HP.
+Qed.
 
 Theorem double_neg : forall P : Prop,
   P -> ~~P.
 Proof.
   (* WORKED IN CLASS *)
-  intros P H. unfold not. intros G. apply G. apply H.  Qed.
+  intros P H. unfold not. intros G. apply G. apply H.
+Qed.
 
 (** **** Exercise: 2 stars, advanced, recommended (double_neg_inf)  *)
 (** Write an informal proof of [double_neg]:
@@ -553,7 +560,8 @@ Proof.
   intros P Q [HAB HBA].
   split.
   - (* -> *) apply HBA.
-  - (* <- *) apply HAB.  Qed.
+  - (* <- *) apply HAB.
+Qed.
 
 Lemma not_true_iff_false : forall b,
   b <> true <-> b = false.
@@ -682,7 +690,8 @@ Theorem exists_example_2 : forall n,
 Proof.
   intros n [m Hm].
   exists (2 + m).
-  apply Hm.  Qed.
+  apply Hm.
+Qed.
 
 (** **** Exercise: 1 star (dist_not_exists)  *)
 (** Prove that "[P] holds for all [x]" implies "there is no [x] for
@@ -709,6 +718,7 @@ Proof.
   - intros [H1 | H2]. destruct H1. exists x. left. assumption.  destruct H2. exists x. right. assumption.
 Qed.     
 
+Print dist_exists_or.
 (** [] *)
 
 (* #################################################################### *)
@@ -733,9 +743,9 @@ Qed.
 
 Fixpoint In {A : Type} (x : A) (l : list A) : Prop :=
   match l with
-  | [] => False
-  | x' :: l' => x' = x \/ In x l'
-  end.
+  | nil => False
+  | h::t => h = x \/ In x t
+  end. 
 
 (** When [In] is applied to a concrete list, it expands into a
     concrete sequence of nested conjunctions. *)
@@ -952,6 +962,7 @@ Check plus_comm.
     intermediate assertions.  For example, suppose we wanted to prove
     the following result: *)
 
+
 Lemma plus_comm3 :
   forall n m p, n + (m + p) = (p + m) + n.
 
@@ -978,6 +989,8 @@ Proof.
   reflexivity.
 Qed.
 
+
+
 (** A more elegant alternative is to apply [plus_comm] directly to the
     arguments we want to instantiate it with, in much the same way as
     we apply a polymorphic function to a type argument. *)
@@ -991,6 +1004,7 @@ Proof.
   reflexivity.
 Qed.
 
+Check plus_comm3_take2. 
 (** You can "use theorems as functions" in this way with almost all
     tactics that take a theorem name as an argument.  Note also that
     theorem application uses the same inference mechanisms as function
@@ -1079,6 +1093,8 @@ Axiom functional_extensionality : forall {X Y: Type}
 
     We can now invoke functional extensionality in proofs: *)
 
+Print functional_extensionality.
+
 Lemma plus_comm_ext : plus = fun n m => m + n.
 Proof.
   apply functional_extensionality. intros n.
@@ -1086,6 +1102,7 @@ Proof.
   apply plus_comm.
 Qed.
 
+Check plus_comm_ext.
 (** Naturally, we must be careful when adding new axioms into Coq's
     logic, as they may render it inconsistent -- that is, it may
     become possible to prove every proposition, including [False]!
@@ -1129,6 +1146,7 @@ Definition tr_rev {X} (l : list X) : list X :=
     call); a decent compiler will generate very efficient code in this
     case.  Prove that both definitions are indeed equivalent. *)
 
+Check tr_rev. 
 
 Lemma tr_rev_correct : forall X, @tr_rev X = @rev X.
 (* FILL IN HERE *) Admitted.
@@ -1364,7 +1382,8 @@ Proof.
         injection h2 as h3 h4.
         split. rewrite h1. assumption.
         rewrite -> IHl1.  assumption. 
- (**
+Qed.
+        (**
   intros. induction l1. 
   + induction l2.
     - simpl. split;  intros; reflexivity. 
@@ -1563,7 +1582,7 @@ Proof.
   exists x.  assumption.
 Qed.   
   
-
+Check not_exists_dist.
 (** [] *)
 
 (** **** Exercise: 5 stars, advanced, optional (classical_axioms)  *)
@@ -1589,10 +1608,12 @@ Definition de_morgan_not_and_not := forall P Q:Prop,
 Definition implies_to_or := forall P Q:Prop,
   (P->Q) -> (~P\/Q).
 
+Check implies_to_or. 
 Theorem peirce_double_neg_elim : peirce -> double_negation_elimination.
 Proof.
   cbv. intros. specialize (H P False). apply H. intros. contradiction.
 Qed.
+
 
 Theorem double_negation_elimination_de_morgan_not_and_not: double_negation_elimination -> de_morgan_not_and_not.
 Proof. 
@@ -1600,6 +1621,8 @@ Proof.
    apply dne.  intro H2. apply H.
    split. intro H3. apply H2. left. assumption.  intro H3.   apply H2. right. assumption.
 Qed. 
+
+Check double_negation_elimination_de_morgan_not_and_not.
 
 Theorem de_morgan_not_and_not_implies_to_or:
   de_morgan_not_and_not -> implies_to_or.
@@ -1615,11 +1638,15 @@ Proof.
   apply H.  intros. assumption. 
 Qed. 
 
+Check implies_to_or_excluded_middle.
+
 Theorem excluded_middle_peirce : excluded_middle -> peirce.
 Proof.
   cbv. intros em P Q H.  destruct (em P) as [p|np].
   assumption. apply H. intros. contradiction.
-Qed.   
+Qed.
+
+Check excluded_middle_peirce. 
 (** [] *)
 
 (** $Date: 2015-08-11 12:03:04 -0400 (Tue, 11 Aug 2015) $ *)

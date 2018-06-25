@@ -1203,7 +1203,7 @@ Qed.
 
 (** **** Exercise: 1 star (update_neq)  *)
 Theorem update_neq :
-  forall (d : partial_map) (m n : id) (o: t),
+  forall (d : partial_map) (m n : id) (o: nat), 
     beq_id m n = false -> find m (update d n o) = find m d.
 Proof.
   intros. simpl. rewrite -> H. reflexivity.

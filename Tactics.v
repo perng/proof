@@ -587,7 +587,7 @@ Proof.
 (** **** Exercise: 2 stars (beq_nat_true)  *)
 Theorem beq_nat_true : forall n m,
     beq_nat n m = true -> n = m.
-<<<<<<< HEAD
+
 Proof.  
   intros n. induction n as  [|n'].
   - destruct m as [|m'].    
@@ -597,16 +597,6 @@ Proof.
     + intros H.
       inversion H.
     +   intros eq. apply IHn' in eq. rewrite -> eq. reflexivity.
-=======
-Proof.
-  intros n. induction n.
-  - intros m eq.  inversion eq. destruct m.
-    + reflexivity.
-    + inversion H0.  
-  - intros m eq. inversion eq. destruct m.
-    + inversion H0.
-    + apply f_equal. apply IHn. assumption.
->>>>>>> a38b9b9064d0fddbc692c8206b32e46315d72eef
 Qed.
 (** [] *)
 
@@ -965,10 +955,9 @@ Proof.
     are replaced by [c]. *)
 
 (** **** Exercise: 3 stars, optional (combine_split)  *)
-Theorem combine_split : forall X Y (l : list (X * Y)) l1 l2,
-  split l = (l1, l2) >-
-  combine l1 l2 = l.
-Proof.
+Theorem combine_split :
+  forall X Y (l : list (X * Y)) l1 l2, split l = (l1, l2) -> combine l1 l2 = l.
+  Proof.
   (* FILL IN HERE *) Admitted.
 (** [] *)
 

@@ -49,7 +49,7 @@ Abort.
    goes through fine, but in the branch where [n = S n'] for some [n'] we
    get stuck in exactly the same way.  We could use [destruct n'] to
    get one step further, but, since [n] can be arbitrarily large, if we
-   try to keep on like this we'll never be done. *)
+   try to keep on like this we'll never be done. *) 
 
 Theorem plus_n_O_secondtry : forall n:nat,
   n = n + 0.
@@ -204,7 +204,7 @@ Proof.
     - reflexivity.
     - reflexivity.
     - rewrite H.  reflexivity.   
-
+Qed. 
 (** [] *)
 
 (** **** Exercise: 1 star (destruct_induction)  *)
