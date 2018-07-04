@@ -129,7 +129,11 @@ Qed.
 Theorem ev_double : forall n,
   ev (double n).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. induction n.
+  + simpl. apply ev_0.
+  + simpl. apply ev_SS. assumption.
+Qed.    
+    
 (** [] *)
 
 (* ####################################################### *)
@@ -289,13 +293,18 @@ Proof.
 Theorem SSSSev__even : forall n,
   ev (S (S (S (S n)))) -> ev n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros n E. inversion E as [|n' E'].
+  inversion E' as [|n'' E'']. apply E''.
+Qed.   
+
 
 Theorem even5_nonsense :
   ev 5 -> 2 + 2 = 9.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  simpl.  intros. exfalso.
+  inversion H.  inversion H1. inversion H3.
+Qed. 
+
 
 (** The way we've used [inversion] here may seem a bit
     mysterious at first.  Until now, we've only used [inversion] on
@@ -418,7 +427,10 @@ Qed.
 (** **** Exercise: 2 stars (ev_sum)  *)
 Theorem ev_sum : forall n m, ev n -> ev m -> ev (n + m).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. induction H.
+  + simpl.  assumption. 
+  + simpl.  apply ev_SS. assumption. 
+Qed.
 (** [] *)
 
 (** **** Exercise: 4 stars, advanced (ev_alternate)  *)
@@ -436,7 +448,16 @@ Inductive ev' : nat -> Prop :=
 
 Theorem ev'_ev : forall n, ev' n <-> ev n.
 Proof.
- (* FILL IN HERE *) Admitted.
+  intros. split.
+  + intros. induction H.
+   - apply ev_0.
+   - apply ev_SS.  apply ev_0.
+   - apply ev_sum. assumption. assumption.
+  +  intros. induction H.
+   - apply ev'_0.
+   - rewrite plus1_S_equiv. rewrite plus1_S_equiv. rewrite <- plus_assoc.
+     simpl.  apply ev'_sum. assumption. apply ev'_2.
+Qed. 
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced, recommended (ev_ev__ev)  *)
@@ -446,7 +467,12 @@ Proof.
 Theorem ev_ev__ev : forall n m,
   ev (n+m) -> ev n -> ev m.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.  induction H0.
+  + rewrite <- plus_O_n. assumption.
+  + apply IHev. rewrite plus_Sn_m in H.  simpl in H.
+    apply evSS_ev. assumption.
+Qed.     
+
 (** [] *)
 
 (** **** Exercise: 3 stars, optional (ev_plus_plus)  *)
@@ -457,7 +483,12 @@ Proof.
 Theorem ev_plus_plus : forall n m p,
   ev (n+m) -> ev (n+p) -> ev (m+p).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. assert (E: ev (n + n)). rewrite <- double_plus.
+  apply ev_double.   assert (F: ev ((n+m)+(n+p))).  apply ev_sum.
+  assumption.  assumption. assert (G: n+m +(n+p) = (n+n)+(m+p)).
+  assert (I: m+(n+p) = n + (m+p)). rewrite plus_assoc. rewrite plus_comm.
+  apply plus_comm.  
+    (* FILL IN HERE *) Admitted.
 (** [] *)
 
 (* ####################################################### *)
