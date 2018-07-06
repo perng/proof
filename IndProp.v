@@ -1,6 +1,9 @@
 (** * IndProp: Inductively Defined Propositions *)
 
+Require Export Arith.
+Require Export Induction. 
 Require Export Logic.
+
 
 (* ####################################################### *)
 (** * Inductively Defined Propositions *)
@@ -129,7 +132,11 @@ Qed.
 Theorem ev_double : forall n,
   ev (double n).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. induction n.
+  + simpl. apply ev_0.
+  + simpl. apply ev_SS. assumption.
+Qed.     
+
 (** [] *)
 
 (* ####################################################### *)
@@ -415,10 +422,21 @@ Qed.
     inductively.  The following exercises provide simple examples of
     this technique, to help you familiarize yourself with it. *)
 
+
+
 (** **** Exercise: 2 stars (ev_sum)  *)
 Theorem ev_sum : forall n m, ev n -> ev m -> ev (n + m).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. induction n.
+  + simpl. assumption.
+  + simpl. induction m.
+    - simpl. rewrite <- plus_n_O. assumption.
+    - inversion H0. destruct H1. 
+          rewrite <-  plus_n_Sm. apply ev_SS. 
+         assert (ev (S (S (S n)))). apply ev_SS. assumption. 
+         assert (ev (S (S (S m)))). apply ev_SS. assumption. 
+
+(* FILL IN HERE *) Admitted.
 (** [] *)
 
 (** **** Exercise: 4 stars, advanced (ev_alternate)  *)
