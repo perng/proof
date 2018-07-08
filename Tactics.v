@@ -765,13 +765,20 @@ Theorem app_length_twice : forall (X:Type) (n:nat) (l:list X),
      length l = n ->
      length (l ++ l) = n + n.
 Proof.
-  intros. generalize dependent n. induction l.
-  + simpl. intros. rewrite <- H. reflexivity.
-  + simpl. intros. induction n. 
-    - inversion H.
-    - simpl.   apply f_equal. inversion H.  apply IHl in H1.  rewrite -> H. 
- 
- (* FILL IN HERE *) Admitted.
+  intros. generalize dependent n. 
+  induction l as [|h t].
+  + simpl. intros n H. rewrite <- H. reflexivity. 
+  + intros n. induction n as [|n'].
+    - simpl. intros H.  inversion H.
+    - simpl. intros H.   inversion H.
+      replace (length (t ++ h ::t)) with (S(length(t ++ t))).
+      rewrite IHt with (n := n'). 
+      rewrite H1. rewrite plus_n_Sm.  reflexivity.
+      assumption.
+      rewrite <- app_length_cons with (X:=X) (l1:=t) (l2:=t) (x:=h).
+      reflexivity. reflexivity. 
+ Qed. 
+
 (** [] *)
 
 
@@ -785,14 +792,16 @@ Theorem double_induction: forall (P : nat -> nat -> Prop),
   (forall m n, P m n -> P (S m) (S n)) ->
   forall m n, P m n.
 Proof.
-  intros. induction m.
+  intros P h1 h2 h3 h4.
+  induction m.
   + induction n. 
     - assumption.
-    - apply H1. assumption.
+    - apply h3. assumption.
   + induction n.
-    - apply H0. assumption.
-    - 
-(* FILL IN HERE *) Admitted.
+    - apply h2. apply IHm. 
+    - apply h4.  apply IHm. 
+Qed. 
+
 (** [] *)
 
 (* ###################################################### *)
@@ -874,6 +883,7 @@ Abort.
 (** The reason that [simpl] doesn't make progress here is that it
     notices that, after tentatively unfolding [bar m], it is left with
     a match whose scrutinee, [m], is a variable, so the [match] cannot
+
     be simplified further.  (It is not smart enough to notice that the
     two branches of the [match] are identical.)  So it gives up on
     unfolding [bar m] and leaves it alone.  Similarly, tentatively
@@ -957,7 +967,8 @@ Proof.
 (** **** Exercise: 3 stars, optional (combine_split)  *)
 Theorem combine_split :
   forall X Y (l : list (X * Y)) l1 l2, split l = (l1, l2) -> combine l1 l2 = l.
-  Proof.
+Proof.
+  intros.    
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
