@@ -405,12 +405,23 @@ Qed.
 Theorem rev_app_distr: forall X (l1 l2 : list X),
   rev (l1 ++ l2) = rev l2 ++ rev l1.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  induction l1.
+  + simpl. rewrite  app_nil_r. reflexivity.
+  + induction l2.
+    - simpl. rewrite app_nil_r.  reflexivity.
+    - simpl. rewrite IHl1. simpl. rewrite app_assoc. reflexivity.
+Qed.       
+
 
 Theorem rev_involutive : forall X : Type, forall l : list X,
   rev (rev l) = l.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. induction l.
+  + reflexivity.
+  + simpl. rewrite rev_app_distr.  simpl. rewrite IHl.  reflexivity.
+Qed.     
+
 (** [] *)
 
 (* ###################################################### *)
@@ -490,13 +501,18 @@ Fixpoint combine {X Y : Type} (lx : list X) (ly : list Y)
     [split].  Make sure it passes the given unit test. *)
 
 Fixpoint split {X Y : Type} (l : list (X*Y))
-               : (list X) * (list Y) :=
-(* FILL IN HERE *) admit.
+  : (list X) * (list Y) :=
+  match l with
+  | [] => ([], [])
+  | h::t => ((fst h):: (fst (split t)), (snd h)::(snd (split t)))
+  end.
+
 
 Example test_split:
   split [(1,false);(2,false)] = ([1;2],[false;false]).
 Proof.
-(* FILL IN HERE *) Admitted.
+  simpl. reflexivity. 
+
 (** [] *)
 
 (* ###################################################### *)
