@@ -1,6 +1,9 @@
 (** * IndProp: Inductively Defined Propositions *)
 
+Require Export Arith.
+Require Export Induction. 
 Require Export Logic.
+
 
 (* ####################################################### *)
 (** * Inductively Defined Propositions *)
@@ -132,8 +135,9 @@ Proof.
   intros. induction n.
   + simpl. apply ev_0.
   + simpl. apply ev_SS. assumption.
-Qed.    
-    
+
+Qed.     
+
 (** [] *)
 
 (* ####################################################### *)
@@ -424,6 +428,8 @@ Qed.
     inductively.  The following exercises provide simple examples of
     this technique, to help you familiarize yourself with it. *)
 
+
+
 (** **** Exercise: 2 stars (ev_sum)  *)
 Theorem ev_sum : forall n m, ev n -> ev m -> ev (n + m).
 Proof.
@@ -431,6 +437,7 @@ Proof.
   + simpl.  assumption. 
   + simpl.  apply ev_SS. assumption. 
 Qed.
+
 (** [] *)
 
 (** **** Exercise: 4 stars, advanced (ev_alternate)  *)
@@ -483,13 +490,14 @@ Qed.
 Theorem ev_plus_plus : forall n m p,
   ev (n+m) -> ev (n+p) -> ev (m+p).
 Proof.
-  intros. assert (E: ev (n + n)). rewrite <- double_plus.
-  apply ev_double.   assert (F: ev ((n+m)+(n+p))).  apply ev_sum.
-  assumption.  assumption. assert (G: n+m +(n+p) = (n+n)+(m+p)).
-  assert (I: m+(n+p) = n + (m+p)). rewrite plus_assoc. rewrite plus_comm.
-  apply plus_comm.  
-    (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros. assert (F: ev ((n+m)+(n+p))). apply ev_sum.  assumption. assumption.
+  assert (G: (n+m) +(n+p) = (n+n)+(m+p)).  rewrite <- (plus_assoc  n m).
+  rewrite (plus_assoc m n p). rewrite (plus_comm m n). rewrite <- plus_assoc.  rewrite <- plus_assoc.
+  reflexivity.
+  assert (ev (n+n)). rewrite  <- double_plus. apply ev_double. 
+  apply (ev_ev__ev (n+n) (m+p)).  rewrite <- G. assumption.  assumption. 
+Qed.
+  (** [] *)
 
 (* ####################################################### *)
 (** * Inductive Relations *)
