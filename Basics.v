@@ -1062,7 +1062,9 @@ Qed.
 Theorem zero_nbeq_plus_1 : forall n : nat,
   beq_nat 0 (n + 1) = false.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. rewrite <- plus_n_Sm. simpl. reflexivity.
+Qed.  
+
 (** [] *)
 
 (* ###################################################################### *)
@@ -1154,7 +1156,9 @@ Theorem identity_fn_applied_twice :
   (forall (x : bool), f x = x) ->
   forall (b : bool), f (f b) = b.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. rewrite H with (x:=b). rewrite H with (x:=b). reflexivity.
+Qed.   
+
 
 (** Now state and prove a theorem [negation_fn_applied_twice] similar
     to the previous one but where the second hypothesis says that the
@@ -1173,7 +1177,13 @@ Theorem andb_eq_orb :
   (andb b c = orb b c) ->
   b = c.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. induction b, c.
+  + reflexivity.
+  + simpl in H. inversion H. 
+  + simpl in H. inversion H. 
+  + reflexivity.
+Qed.    
+
 (** [] *)
 
 (** **** Exercise: 3 stars (binary)  *)
