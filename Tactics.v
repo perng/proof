@@ -965,10 +965,21 @@ Proof.
     are replaced by [c]. *)
 
 (** **** Exercise: 3 stars, optional (combine_split)  *)
+
+
 Theorem combine_split :
   forall X Y (l : list (X * Y)) l1 l2, split l = (l1, l2) -> combine l1 l2 = l.
 Proof.
-  intros.    
+  intros.
+  induction l as  [| h t].
+  + inversion H.  reflexivity.
+  + induction l1.
+    - inversion H.
+    - induction l2.
+      * inversion H.
+      * inversion H. unfold combine. simpl. 
+        simpl. 
+    destruct  H. 
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
