@@ -537,10 +537,10 @@ Fixpoint factorial (n:nat) : nat :=
 
 
 Example test_factorial1:          (factorial 3) = 6.
-Proof. reflexivity. 
+Proof. reflexivity. Qed. 
 
 Example test_factorial2:          (factorial 5) = (mult 10 12).
-Proof. reflexivity. 
+Proof. reflexivity. Qed. 
 
 (** [] *)
 

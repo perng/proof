@@ -3,6 +3,7 @@
 (* REMINDER: Please do not put solutions to the exercises in
    publicly accessible places.  Thank you!! *)
 
+
 Require Export Lists.
 
 (* ###################################################### *)
@@ -512,7 +513,7 @@ Example test_split:
   split [(1,false);(2,false)] = ([1;2],[false;false]).
 Proof.
   simpl. reflexivity. 
-
+Qed. 
 (** [] *)
 
 (* ###################################################### *)
@@ -551,7 +552,12 @@ Proof. reflexivity. Qed.
     passes the unit tests below. *)
 
 Definition hd_error {X : Type} (l : list X) : option X :=
-  (* FILL IN HERE *) admit.
+  match l with
+  | nil => None
+  | h::_ =>Some h
+              end.
+
+
 
 (** Once again, to force the implicit arguments to be explicit,
     we can use [@] before the name of the function. *)
@@ -559,9 +565,14 @@ Definition hd_error {X : Type} (l : list X) : option X :=
 Check @hd_error.
 
 Example test_hd_error1 : hd_error [1;2] = Some 1.
- (* FILL IN HERE *) Admitted.
+Proof.
+  reflexivity. 
+Qed.
+
 Example test_hd_error2 : hd_error  [[1];[2]]  = Some [1].
- (* FILL IN HERE *) Admitted.
+Proof.
+  reflexivity.
+Qed.   
 (** [] *)
 
 (* ###################################################### *)
@@ -678,17 +689,27 @@ Proof. reflexivity.  Qed.
     and returns a list of just those that are even and greater than
     7. *)
 
-Definition filter_even_gt7 (l : list nat) : list nat := admit.
+
+
+Definition filter_even_gt7 (l : list nat) : list nat := 
+  filter (fun x => andb (evenb x) (leb 7 x)) l.
+
 (**  filter (fun n => andb (evenb n) (bgt_nat n 7)) l. *)
 
+(** Compute   (filter_even_gt7 [5;6;7;8;9]). *)
 
 Example test_filter_even_gt7_1 :
-  filter_even_gt7 [1;2;6;9;10;3;12;8] = [10;12;8].
- (* FILL IN HERE *) Admitted.
+  (filter_even_gt7 [1;2;6;9;10;3;12;8;11]) = [10;12;8].
+Proof.
+    simpl. reflexivity. 
+Qed. 
+
 
 Example test_filter_even_gt7_2 :
   filter_even_gt7 [5;2;6;19;129] = [].
- (* FILL IN HERE *) Admitted.
+Proof.
+  reflexivity.
+Qed.   
 (** [] *)
 
 (** **** Exercise: 3 stars (partition)  *)
@@ -704,17 +725,24 @@ Example test_filter_even_gt7_2 :
    containing those that fail the test.  The order of elements in the
    two sublists should be the same as their order in the original
    list. *)
+Definition composition {X Y Z: Type}
+           (f1 : X -> Y)
+           (f2 : Y -> Z) : X->Z :=
+     fun (x : X) => f2 (f1 x).
 
 Definition partition {X : Type}
                      (test : X -> bool)
                      (l : list X)
-                   : list X * list X :=
-(* FILL IN HERE *) admit.
+  : list X * list X :=
+  ((filter test l), (filter (composition test negb) l)). 
+
 
 Example test_partition1: partition oddb [1;2;3;4;5] = ([1;3;5], [2;4]).
-(* FILL IN HERE *) Admitted.
+Proof.  reflexivity. Qed. 
+
 Example test_partition2: partition (fun x => false) [5;9;0] = ([], [5;9;0]).
-(* FILL IN HERE *) Admitted.
+Proof.  reflexivity. Qed. 
+
 (** [] *)
 
 (* ###################################################### *)
@@ -759,11 +787,21 @@ Proof. reflexivity.  Qed.
 (** Show that [map] and [rev] commute.  You may need to define an
     auxiliary lemma. *)
 
-
+Lemma map_app : forall (X Y : Type) (f: X-> Y) (a b :list X),
+    map f (a++b) = (map f a) ++ (map f b).
+Proof.   
+  intros. induction a.
+  + reflexivity.
+  + simpl. rewrite IHa. reflexivity. 
+Qed.
+  
 Theorem map_rev : forall (X Y : Type) (f : X -> Y) (l : list X),
   map f (rev l) = rev (map f l).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. induction l.
+  + reflexivity.
+  + simpl. rewrite map_app. rewrite IHl.  simpl. reflexivity. 
+Qed. 
 (** [] *)
 
 (** **** Exercise: 2 stars, recommended (flat_map)  *)
@@ -779,13 +817,18 @@ Proof.
 *)
 
 Fixpoint flat_map {X Y:Type} (f:X -> list Y) (l:list X)
-                   : (list Y) :=
-  (* FILL IN HERE *) admit.
+  : (list Y) :=
+  match l with
+  | [] => []
+  | h::t => (f h) ++ (flat_map f t)
+  end. 
+
 
 Example test_flat_map1:
   flat_map (fun n => [n;n;n]) [1;5;4]
   = [1; 1; 1; 5; 5; 5; 4; 4; 4].
- (* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed. 
+
 (** [] *)
 
 (** Lists are not the only inductive type that we can write a
@@ -926,8 +969,13 @@ Proof. reflexivity. Qed.
 (** Prove the correctness of [fold_length]. *)
 
 Theorem fold_length_correct : forall X (l : list X),
-  fold_length l = length l.
-(* FILL IN HERE *) Admitted.
+    fold_length l = length l.
+Proof.
+  intros. induction l.
+  + reflexivity.
+  + simpl.  unfold fold_length. simpl. rewrite <-IHl. reflexivity.
+Qed.     
+
 (** [] *)
 
 (** **** Exercise: 3 stars (fold_map)  *)
@@ -935,7 +983,8 @@ Theorem fold_length_correct : forall X (l : list X),
     below. *)
 
 Definition fold_map {X Y:Type} (f : X -> Y) (l : list X) : list Y :=
-(* FILL IN HERE *) admit.
+ 
+  (* FILL IN HERE *) admit.
 
 (** Write down a theorem [fold_map_correct] in Coq stating that
    [fold_map] is correct, and prove it. *)
