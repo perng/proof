@@ -1059,6 +1059,9 @@ Proof.
     - destruct (f false)  eqn:eqfalse.
       * rewrite eqtrue.  assumption.
       * rewrite eqfalse. assumption.
+    - destruct (f false) eqn:eqfalse.
+      * rewrite eqtrue. assumption.
+      * rewrite eqfalse. assumption.
 Qed.         
 
 (** [] *)
@@ -1133,7 +1136,14 @@ Qed.
 Theorem beq_nat_sym : forall (n m : nat),
   beq_nat n m = beq_nat m n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  induction (beq_nat n m) eqn:nm.
+  + apply beq_nat_true in nm. rewrite nm. apply beq_nat_refl.
+  + induction (beq_nat m n) eqn:mn.
+  - apply beq_nat_true in mn. rewrite mn in nm. rewrite <- beq_nat_refl in nm. symmetry. assumption.
+  - reflexivity.
+Qed.     
+
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced, optional (beq_nat_sym_informal)  *)
@@ -1148,12 +1158,16 @@ Proof.
 *)
 
 (** **** Exercise: 3 stars, optional (beq_nat_trans)  *)
+(** beq_nat_true: forall n m : nat, beq_nat n m = true -> n = m. *)
 Theorem beq_nat_trans : forall n m p,
   beq_nat n m = true ->
   beq_nat m p = true ->
   beq_nat n p = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.  apply beq_nat_true in H. apply beq_nat_true in H0.
+  rewrite <- H0.  rewrite <- H. symmetry. apply beq_nat_refl. 
+Qed.
+
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced (split_combine)  *)
