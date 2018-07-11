@@ -1188,6 +1188,12 @@ Theorem filter_exercise : forall (X : Type) (test : X -> bool)
      filter test l = x :: lf ->
      test x = true.
 Proof.
+  intros. induction (test x) eqn:tx.
+  + reflexivity.
+  + induction l.
+  - inversion H.
+  - apply IHl.    induction (test x0) eqn:tx0.
+    * simpl in H. rewrite tx0 in H.  inversion H.  rewrite H1 in tx0. rewrite H1 in H.  rewrite H2 in IHl. symmetry in H2. 
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
