@@ -1015,8 +1015,9 @@ Definition prod_curry {X Y Z : Type}
     the theorems below to show that the two are inverses. *)
 
 Definition prod_uncurry {X Y Z : Type}
-  (f : X -> Y -> Z) (p : X * Y) : Z :=
-  (* FILL IN HERE *) admit.
+           (f : X -> Y -> Z) (p : X * Y) : Z :=
+  (f (fst p)) (snd p). 
+
 
 (** As a trivial example of the usefulness of currying, we can use it
     to shorten one of the examples that we saw above: *)
@@ -1035,13 +1036,18 @@ Theorem uncurry_curry : forall (X Y Z : Type)
                         x y,
   prod_curry (prod_uncurry f) x y = f x y.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  unfold prod_uncurry. unfold prod_curry.  simpl. reflexivity.
+Qed.   
+
 
 Theorem curry_uncurry : forall (X Y Z : Type)
                         (f : (X * Y) -> Z) (p : X * Y),
   prod_uncurry (prod_curry f) p = f p.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. unfold prod_uncurry. unfold prod_curry.  destruct p as (x,y). simpl. reflexivity. 
+Qed.
+
 (** [] *)
 
 (** **** Exercise: 2 stars, advanced (nth_error_informal)  *)
