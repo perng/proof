@@ -966,21 +966,31 @@ Proof.
 
 (** **** Exercise: 3 stars, optional (combine_split)  *)
 
+Print split.
+Print combine. 
+
+Lemma head_eq : forall X (h1 h2:X) (t1 t2: list(X)),
+    (h1::t1) = (h2::t2) -> h1=h2.
+Proof.
+  intros. inversion H. reflexivity. 
+Qed.
 
 Theorem combine_split :
   forall X Y (l : list (X * Y)) l1 l2, split l = (l1, l2) -> combine l1 l2 = l.
 Proof.
-  intros.
-  induction l as  [| h t].
-  + inversion H.  reflexivity.
-  + induction l1.
-    - inversion H.
-    - induction l2.
-      * inversion H.
-      * inversion H. unfold combine. simpl. 
-        simpl. 
-    destruct  H. 
-  (* FILL IN HERE *) Admitted.
+  induction l as [|(x, y) l'].
+  + intros l1 l2 h1.
+    simpl in h1.
+    inversion h1.
+    simpl; reflexivity.
+  + simpl.
+    destruct (split l') as [xs ys].   (* The KEY step! *)
+    intros l1 l2 h1.
+    inversion h1.
+    simpl.
+    rewrite IHl'; reflexivity.
+Qed.   
+
 (** [] *)
 
 (** However, [destruct]ing compound expressions requires a bit of
@@ -1184,10 +1194,24 @@ Qed.
     and [l2] for [split] [combine l1 l2 = (l1,l2)] to be true?)  *)
 
 Definition split_combine_statement : Prop :=
-(* FILL IN HERE *) admit.
+  forall (X Y: Type) (l1: list X) (l2: list Y),
+    length l1 = length l2 -> split(combine l1 l2) = (l1, l2). 
+
 
 Theorem split_combine : split_combine_statement.
 Proof.
+  unfold split_combine_statement.
+  intros.
+  induction l1 as [|h1 t1].
+  + induction l2 as [|h2 t2].
+    - reflexivity.
+    - inversion H.
+  + induction l2 as [|h2 t2].
+    - inversion H.
+    - simpl.  assert (fst (split (combine t1 t2)) = t1).
+      destruct (combine t1 t2)  as [|l].
+      * 
+      
 (* FILL IN HERE *) Admitted.
 
 
@@ -1197,18 +1221,32 @@ Proof.
 (** This one is a bit challenging.  Pay attention to the form of your
     induction hypothesis. *)
 
+
+Lemma filter_lemma : forall (X : Type) (test : X -> bool)
+                             (x : X) (l lf : list X),
+     test x =false -> (filter test l = x::lf -> False).
+Proof.
+  intros. induction l.
+  + inversion H0.
+  + apply IHl. induction (test x0) eqn:Hx0.
+  - simpl in  H0.  rewrite Hx0 in H0. inversion H0. rewrite H2 in Hx0.
+    rewrite Hx0 in H. inversion H.
+  - simpl in H0.  rewrite Hx0 in H0. apply IHl in H0. inversion H0. 
+Qed.
+
 Theorem filter_exercise : forall (X : Type) (test : X -> bool)
                              (x : X) (l lf : list X),
      filter test l = x :: lf ->
      test x = true.
 Proof.
-  intros. induction (test x) eqn:tx.
+  intros.
+  induction (test x) eqn:tx.
   + reflexivity.
   + induction l.
   - inversion H.
-  - apply IHl.    induction (test x0) eqn:tx0.
-    * simpl in H. rewrite tx0 in H.  inversion H.  rewrite H1 in tx0. rewrite H1 in H.  rewrite H2 in IHl. symmetry in H2. 
-  (* FILL IN HERE *) Admitted.
+  - assert (test x =false -> (filter test (x0::l) = x::lf -> False)).  apply filter_lemma.
+    exfalso. apply H0. assumption. assumption. 
+Qed.     
 (** [] *)
 
 (** **** Exercise: 4 stars, advanced, recommended (forall_exists_challenge)  *)
