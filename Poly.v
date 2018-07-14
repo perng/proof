@@ -982,8 +982,11 @@ Qed.
 (** We can also define [map] in terms of [fold].  Finish [fold_map]
     below. *)
 
+Definition car {X :Type} (x : X) (l : list X) : list X := x::l. 
+
+
 Definition fold_map {X Y:Type} (f : X -> Y) (l : list X) : list Y :=
- 
+
   (* FILL IN HERE *) admit.
 
 (** Write down a theorem [fold_map_correct] in Coq stating that
@@ -1015,8 +1018,9 @@ Definition prod_curry {X Y Z : Type}
     the theorems below to show that the two are inverses. *)
 
 Definition prod_uncurry {X Y Z : Type}
-  (f : X -> Y -> Z) (p : X * Y) : Z :=
-  (* FILL IN HERE *) admit.
+  (f : X -> Y -> Z) (p : X * Y) : Z := f (fst p) (snd p). 
+
+
 
 (** As a trivial example of the usefulness of currying, we can use it
     to shorten one of the examples that we saw above: *)
@@ -1035,13 +1039,17 @@ Theorem uncurry_curry : forall (X Y Z : Type)
                         x y,
   prod_curry (prod_uncurry f) x y = f x y.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. unfold prod_curry. unfold prod_uncurry.  reflexivity.
+Qed.   
+
 
 Theorem curry_uncurry : forall (X Y Z : Type)
                         (f : (X * Y) -> Z) (p : X * Y),
   prod_uncurry (prod_curry f) p = f p.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.  destruct p as  (a,b). unfold prod_uncurry. unfold prod_curry.  reflexivity. 
+Qed.   
+
 (** [] *)
 
 (** **** Exercise: 2 stars, advanced (nth_error_informal)  *)
@@ -1103,12 +1111,14 @@ Definition three : nat := @doit3times.
 (** Successor of a natural number: *)
 
 Definition succ (n : nat) : nat :=
-  (* FILL IN HERE *) admit.
+   fun (X: Type) (num : nat
+
 
 Example succ_1 : succ zero = one.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. unfold succ. reflexivity. Qed. 
 
 Example succ_2 : succ one = two.
+Proof. unfold succ. reflexivity. Qed. 
 Proof. (* FILL IN HERE *) Admitted.
 
 Example succ_3 : succ two = three.
