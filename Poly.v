@@ -969,6 +969,7 @@ Proof. reflexivity. Qed.
 (** Prove the correctness of [fold_length]. *)
 
 Theorem fold_length_correct : forall X (l : list X),
+    
     fold_length l = length l.
 Proof.
   intros. induction l.
@@ -981,16 +982,38 @@ Qed.
 (** **** Exercise: 3 stars (fold_map)  *)
 (** We can also define [map] in terms of [fold].  Finish [fold_map]
     below. *)
+(** Fixpoint fold {X Y:Type} (f: X->Y->Y) (l:list X) (b:Y)
+                         : Y :=
+  match l with
+  | nil => b
+  | h :: t => f h (fold f t b)
+  end.
 
-Definition car {X :Type} (x : X) (l : list X) : list X := x::l. 
+Fixpoint map {X Y:Type} (f:X->Y) (l:list X) : (list Y) :=
+  match l with
+  | []     => []
+  | h :: t => (f h) :: (map f t)
+  end.
+
+*)
 
 
-Definition fold_map {X Y:Type} (f : X -> Y) (l : list X) : list Y :=
+Definition concat {X :Type} (x: X) (y: list X) : list X :=  x::y. 
 
-  (* FILL IN HERE *) admit.
+Definition composition {X Y Z: Type} (f : X->Y)(g: Y->Z) :=
+  fun (x: X) => g (f x).  
+
+Definition fold_map {X Y:Type} (f : X -> Y) (l : list X): (list Y) :=
+fold (fun x acc => f x :: acc) l nil.
 
 (** Write down a theorem [fold_map_correct] in Coq stating that
    [fold_map] is correct, and prove it. *)
+Theorem  fold_correct :forall {X Y:Type} (f: X->Y) (l: list X), fold_map f l = map f l.
+Proof.
+  intros. induction l.
+  + reflexivity. 
+  + simpl.   unfold fold_map.  simpl.  rewrite <- IHl. unfold fold_map. reflexivity.
+Qed.    
 
 (* FILL IN HERE *)
 (** [] *)
@@ -1021,7 +1044,6 @@ Definition prod_uncurry {X Y Z : Type}
   (f : X -> Y -> Z) (p : X * Y) : Z := f (fst p) (snd p). 
 
 
-
 (** As a trivial example of the usefulness of currying, we can use it
     to shorten one of the examples that we saw above: *)
 
@@ -1039,6 +1061,7 @@ Theorem uncurry_curry : forall (X Y Z : Type)
                         x y,
   prod_curry (prod_uncurry f) x y = f x y.
 Proof.
+
   intros. unfold prod_curry. unfold prod_uncurry.  reflexivity.
 Qed.   
 
@@ -1111,7 +1134,8 @@ Definition three : nat := @doit3times.
 (** Successor of a natural number: *)
 
 Definition succ (n : nat) : nat :=
-   fun (X: Type) (num : nat
+  fun  (X: Type)  (f : X-> X) (x: X)=>
+     f (n X f x). 
 
 
 Example succ_1 : succ zero = one.
@@ -1119,41 +1143,52 @@ Proof. unfold succ. reflexivity. Qed.
 
 Example succ_2 : succ one = two.
 Proof. unfold succ. reflexivity. Qed. 
-Proof. (* FILL IN HERE *) Admitted.
+
 
 Example succ_3 : succ two = three.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. unfold succ. reflexivity. Qed. 
+
 
 (** Addition of two natural numbers: *)
 
 Definition plus (n m : nat) : nat :=
-  (* FILL IN HERE *) admit.
+  fun (X: Type) (f: X->X) (x: X) =>
+    n X f (m X f x).  
+
 
 Example plus_1 : plus zero one = one.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. unfold succ. reflexivity. Qed. 
+
 
 Example plus_2 : plus two three = plus three two.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. unfold succ. reflexivity. Qed. 
+
 
 Example plus_3 :
   plus (plus two two) three = plus one (plus three three).
-Proof. (* FILL IN HERE *) Admitted.
+Proof. unfold succ. reflexivity. Qed. 
+
 
 (** Multiplication: *)
 
 Definition mult (n m : nat) : nat :=
-  (* FILL IN HERE *) admit.
+  fun (X: Type) (f: X->X)  =>
+    n X (m X f). 
 
 Example mult_1 : mult one one = one.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. unfold mult.  unfold one.  reflexivity. Qed. 
+
 
 Example mult_2 : mult zero (plus three three) = zero.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. unfold mult.   reflexivity. Qed. 
+
 
 Example mult_3 : mult two three = plus three three.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. unfold mult. reflexivity. Qed. 
+
 
 (** Exponentiation: *)
+
 
 (** (_Hint_: Polymorphism plays a crucial role here.  However,
     choosing the right type to iterate over can be tricky.  If you hit
@@ -1161,16 +1196,20 @@ Proof. (* FILL IN HERE *) Admitted.
     type: [nat] itself is usually problematic.) *)
 
 Definition exp (n m : nat) : nat :=
-  (* FILL IN HERE *) admit.
+  fun (X: Type)  => (m (X-> X)) (n X). 
+   
 
 Example exp_1 : exp two two = plus two two.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed. 
+       
 
 Example exp_2 : exp three two = plus (mult two (mult two two)) one.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed. 
+
 
 Example exp_3 : exp three zero = one.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed. 
+
 
 End Church.
 (** [] *)

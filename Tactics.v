@@ -1191,7 +1191,8 @@ Qed.
     [combine]. Then, prove that the property holds. (Be sure to leave
     your induction hypothesis general by not doing [intros] on more
     things than necessary.  Hint: what property do you need of [l1]
-    and [l2] for [split] [combine l1 l2 = (l1,l2)] to be true?)  *)
+    and [l2] for [split] [combine l1 l2 = (l1,l2)] to be true?)  *)  
+  
 
 Definition split_combine_statement : Prop :=
   forall (X Y: Type) (l1: list X) (l2: list Y),
@@ -1201,7 +1202,7 @@ Definition split_combine_statement : Prop :=
 Theorem split_combine : split_combine_statement.
 Proof.
   unfold split_combine_statement.
-  intros.
+  intros X Y l1 l2 H.      
   induction l1 as [|h1 t1].
   + induction l2 as [|h2 t2].
     - reflexivity.
