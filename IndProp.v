@@ -1,4 +1,4 @@
-(** * IndProp: Inductively Defined Propositions *)
+ (** * IndProp: Inductively Defined Propositions *)
 
 Require Export Arith.
 Require Export Induction. 
@@ -175,7 +175,7 @@ Qed.
 
 Theorem evenb_minus2: forall n,
   evenb n = true -> evenb (pred (pred n)) = true.
-Proof.
+Proof.  
   intros [ | [ | n' ] ].
   - (* n = 0 *) reflexivity.
   - (* n = 1; contradiction *) intros H. inversion H.
@@ -544,19 +544,16 @@ Notation "m <= n" := (le m n).
 Theorem test_le1 :
   3 <= 3.
 Proof.
-  (* WORKED IN CLASS *)
   apply le_n.  Qed.
 
 Theorem test_le2 :
   3 <= 6.
 Proof.
-  (* WORKED IN CLASS *)
   apply le_S. apply le_S. apply le_S. apply le_n.  Qed.
 
 Theorem test_le3 :
   (2 <= 1) -> 2 + 2 = 5.
 Proof.
-  (* WORKED IN CLASS *)
   intros H. inversion H. inversion H2.  Qed.
 
 (** The "strictly less than" relation [n < m] can now be defined
@@ -584,14 +581,24 @@ Inductive next_even : nat -> nat -> Prop :=
 (** Define an inductive binary relation [total_relation] that holds
     between every pair of natural numbers. *)
 
-(* FILL IN HERE *)
+Inductive total_relation : nat -> nat -> Prop :=
+| tr : forall n m: nat, total_relation n m. 
+
+Example tr_1: total_relation 7 2.
+Proof. apply tr. Qed.
+
 (** [] *)
 
 (** **** Exercise: 2 stars (empty_relation)  *)
 (** Define an inductive binary relation [empty_relation] (on numbers)
     that never holds. *)
 
-(* FILL IN HERE *)
+Inductive empty_relation : nat -> nat -> Prop :=.
+
+Example er_1: empty_relation 5 5 -> False.
+Proof.
+  intros. inversion H. Qed.
+
 (** [] *)
 
 (** **** Exercise: 3 stars, optional (le_exercises)  *)
@@ -601,45 +608,93 @@ Inductive next_even : nat -> nat -> Prop :=
 
 Lemma le_trans : forall m n o, m <= n -> n <= o -> m <= o.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  induction o.
+  + inversion H0. rewrite <- H1. assumption.
+  + inversion H0.
+    - rewrite <- H1. assumption.
+    - apply le_S. apply IHo. assumption.
+Qed.
 
 Theorem O_le_n : forall n,
   0 <= n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. induction n.
+  + apply le_n.
+  + apply le_S. assumption.
+Qed.    
 
 Theorem n_le_m__Sn_le_Sm : forall n m,
   n <= m -> S n <= S m.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  induction m.
+  + inversion H. apply le_n.   
+  + inversion H. apply le_n. apply IHm in H1. apply le_S in H1.
+    assumption.
+Qed.
 
 Theorem Sn_le_Sm__n_le_m : forall n m,
   S n <= S m -> n <= m.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  induction m.
+  + inversion H.
+    - apply le_n.
+    - inversion H1.
+  + inversion H.
+    - apply le_n.
+    - apply le_S. apply IHm. assumption.
+Qed.      
+        
+
 
 Theorem le_plus_l : forall a b,
   a <= a + b.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  induction b.
+  + rewrite <- plus_n_O. apply le_n.
+  + rewrite <- plus_n_Sm.  apply le_S. assumption.
+Qed.    
 
 Theorem plus_lt : forall n1 n2 m,
   n1 + n2 < m ->
   n1 < m /\ n2 < m.
 Proof.
- unfold lt.
- (* FILL IN HERE *) Admitted.
+  unfold lt.
+  intros. split.
+  + induction n2.
+    - rewrite  plus_n_O with (n:= n1). assumption.
+    - apply IHn2. rewrite <- plus_n_Sm in H.  inversion H.
+      * apply le_S. apply le_n.
+      * rewrite H1. apply le_S in H. apply Sn_le_Sm__n_le_m in H. assumption.
+  + induction n1.
+    - rewrite  plus_n_O with (n:= n2). rewrite plus_comm. assumption.
+    - apply IHn1. rewrite plus_comm in H. rewrite plus_comm.  rewrite <- plus_n_Sm in H.  inversion H.
+      * apply le_S. apply le_n.
+      * rewrite H1. apply le_S in H. apply Sn_le_Sm__n_le_m in H. assumption.
+Qed.
 
 Theorem lt_S : forall n m,
   n < m ->
   n < S m.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  unfold lt.
+  intros.
+  apply le_S. assumption.
+Qed.  
 
 Theorem leb_complete : forall n m,
   leb n m = true -> n <= m.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. 
+  induction n.
+  + induction m.    
+    - apply le_n.
+    - unfold lt.
+   + inversion IHm.   apply le_S.  apply IHm.      
+(* FILL IN HERE *) Admitted.
 
 (** Hint: The next one may be easiest to prove by induction on [m]. *)
 
