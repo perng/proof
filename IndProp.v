@@ -680,21 +680,18 @@ Theorem lt_S : forall n m,
   n < m ->
   n < S m.
 Proof.
-  unfold lt.
   intros.
-  apply le_S. assumption.
-Qed.  
-
-Theorem leb_complete : forall n m,
+  unfold lt. induction m.
+  - inversion H.
+  - inversion H.
+    + apply le_S. apply le_n.
+    + apply le_S in H1. apply le_S in H1. assumption.
+Qed.      
+   
+heorem leb_complete : forall n m,
   leb n m = true -> n <= m.
 Proof.
-  intros. 
-  induction n.
-  + induction m.    
-    - apply le_n.
-    - unfold lt.
-   + inversion IHm.   apply le_S.  apply IHm.      
-(* FILL IN HERE *) Admitted.
+  (* FILL IN HERE *) Admitted.
 
 (** Hint: The next one may be easiest to prove by induction on [m]. *)
 
@@ -704,12 +701,15 @@ Theorem leb_correct : forall n m,
 Proof.
   (* FILL IN HERE *) Admitted.
 
+
 (** Hint: This theorem can easily be proved without using [induction]. *)
 
 Theorem leb_true_trans : forall n m o,
   leb n m = true -> leb m o = true -> leb n o = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  rewrite <- leb_correct.
+(* FILL IN HERE *) Admitted.
 
 (** **** Exercise: 2 stars, optional (leb_iff)  *)
 Theorem leb_iff : forall n m,
