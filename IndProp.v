@@ -764,10 +764,27 @@ Proof.
 Definition fR : nat -> nat -> nat :=
   fun  (m n: nat) => m+n.
 
+Lemma R_O_n_n: forall n, R 0 n n.
+Proof.
+  intros. induction n.
+  + apply c1.
+  + apply c3. assumption.
+Qed.    
 
 Theorem R_equiv_fR : forall m n o, R m n o <-> fR m n = o.
 Proof.
-(* FILL IN HERE *) Admitted.
+  intros. split.
+  + intros. unfold fR. induction H.
+    ++ reflexivity.
+    ++ simpl. rewrite IHR. reflexivity.
+    ++ rewrite plus_comm. simpl.  rewrite plus_comm.  rewrite IHR. reflexivity.
+    ++ rewrite <- plus_n_Sm in IHR. rewrite  plus_Sn_m in IHR. inversion IHR. reflexivity.
+    ++ rewrite plus_comm. assumption.
+  + intros. unfold fR in H.  induction H.
+    induction m.
+    ++ rewrite plus_O_n. apply R_O_n_n.
+    ++ simpl. apply c2. assumption.
+Qed.       
 (** [] *)
 
 End R.
