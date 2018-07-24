@@ -762,7 +762,8 @@ Proof.
     in Coq? *)
 
 Definition fR : nat -> nat -> nat :=
-  (* FILL IN HERE *) admit.
+  fun  (m n: nat) => m+n.
+
 
 Theorem R_equiv_fR : forall m n o, R m n o <-> fR m n = o.
 Proof.
