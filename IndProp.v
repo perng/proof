@@ -688,7 +688,7 @@ Proof.
     + apply le_S in H1. apply le_S in H1. assumption.
 Qed.      
    
-heorem leb_complete : forall n m,
+Theorem leb_complete : forall n m,
   leb n m = true -> n <= m.
 Proof.
   (* FILL IN HERE *) Admitted.
@@ -708,7 +708,7 @@ Theorem leb_true_trans : forall n m o,
   leb n m = true -> leb m o = true -> leb n o = true.
 Proof.
   intros.
-  rewrite <- leb_correct.
+  
 (* FILL IN HERE *) Admitted.
 
 (** **** Exercise: 2 stars, optional (leb_iff)  *)
@@ -746,7 +746,15 @@ Inductive R : nat -> nat -> nat -> Prop :=
 
 (* FILL IN HERE *)
 []
-*)
+ *)
+Example r_1_1_2: R  1 1 2.
+Proof.
+  apply c5. apply c3. apply c5. apply c3. apply c1.
+Qed.
+
+Example r_2_2_6 : R 2 2 6.
+Proof.
+  apply c3. apply c2. apply c2. apply c5. apply c2. Admitted.
 
 (** **** Exercise: 3 stars, optional (R_fact)  *)
 (** The relation [R] above actually encodes a familiar function.
