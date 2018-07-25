@@ -6,7 +6,7 @@
           ###  PLEASE DO NOT DISTRIBUTE SOLUTIONS PUBLICLY  ###
           #####################################################
 
-   (See the [Preface] for why.) 
+   (See the [Preface] for why.)
 
 *)
 
@@ -244,7 +244,7 @@ Proof. simpl. reflexivity. Qed.
     should return [true] if either or both of its inputs are
     [false]. *)
 
-Definition nandb (b1:bool) (b2:bool) : bool :=  
+Definition nandb (b1:bool) (b2:bool) : bool :=
   match (b1 && b2) with
   | true => false
   | false => true
@@ -533,14 +533,14 @@ Fixpoint factorial (n:nat) : nat :=
   match n with
   | 0 => 1
   | S p => mult n (factorial p)
-  end. 
+  end.
 
 
 Example test_factorial1:          (factorial 3) = 6.
-Proof. reflexivity. Qed. 
+Proof. reflexivity. Qed.
 
 Example test_factorial2:          (factorial 5) = (mult 10 12).
-Proof. reflexivity. Qed. 
+Proof. reflexivity. Qed.
 
 (** [] *)
 
@@ -624,13 +624,13 @@ Definition blt_nat (n m : nat) : bool :=
 
 
 Example test_blt_nat1:             (blt_nat 2 2) = false.
-Proof. reflexivity.  Qed. 
+Proof. reflexivity.  Qed.
 
 Example test_blt_nat2:             (blt_nat 2 4) = true.
-Proof. reflexivity.  Qed. 
+Proof. reflexivity.  Qed.
 
 Example test_blt_nat3:             (blt_nat 4 2) = false.
-Proof. reflexivity.  Qed. 
+Proof. reflexivity.  Qed.
 
 (** [] *)
 
@@ -806,9 +806,9 @@ Proof.
 Theorem plus_id_exercise : forall n m o : nat,
   n = m -> m = o -> n + m = m + o.
 Proof.
-  intros. 
+  intros.
   rewrite  <- H0.  rewrite H. reflexivity.
-Qed.   
+Qed.
 
 (** [] *)
 
@@ -826,8 +826,8 @@ Qed.
 (** We can also use the [rewrite] tactic with a previously proved
     theorem instead of a hypothesis from the context. If the statement
     of the previously proved theorem involves quantified variables,
-    as in the example below, Coq tries to instantiate them 
-    by matching with the current goal. *)   
+    as in the example below, Coq tries to instantiate them
+    by matching with the current goal. *)
 
 Theorem mult_0_plus : forall n m : nat,
   (0 + n) * m = n * m.
@@ -842,8 +842,8 @@ Theorem mult_S_1 : forall n m : nat,
   m * (1 + n) = m * m.
 Proof.
   intros. simpl. rewrite <- H.
-  reflexivity. 
-Qed. 
+  reflexivity.
+Qed.
 
 (** [] *)
 
@@ -1054,7 +1054,7 @@ Proof.
   intros. induction c.
   + reflexivity.
   + induction b;  simpl in H; inversion H.
-Qed.   
+Qed.
 
 (** [] *)
 
@@ -1063,7 +1063,7 @@ Theorem zero_nbeq_plus_1 : forall n : nat,
   beq_nat 0 (n + 1) = false.
 Proof.
   intros. rewrite <- plus_n_Sm. simpl. reflexivity.
-Qed.  
+Qed.
 
 (** [] *)
 
@@ -1157,7 +1157,7 @@ Theorem identity_fn_applied_twice :
   forall (b : bool), f (f b) = b.
 Proof.
   intros. rewrite H with (x:=b). rewrite H with (x:=b). reflexivity.
-Qed.   
+Qed.
 
 
 (** Now state and prove a theorem [negation_fn_applied_twice] similar
@@ -1179,10 +1179,10 @@ Theorem andb_eq_orb :
 Proof.
   intros. induction b, c.
   + reflexivity.
-  + simpl in H. inversion H. 
-  + simpl in H. inversion H. 
+  + simpl in H. inversion H.
+  + simpl in H. inversion H.
   + reflexivity.
-Qed.    
+Qed.
 
 (** [] *)
 

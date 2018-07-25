@@ -49,7 +49,7 @@ Abort.
    goes through fine, but in the branch where [n = S n'] for some [n'] we
    get stuck in exactly the same way.  We could use [destruct n'] to
    get one step further, but, since [n] can be arbitrarily large, if we
-   try to keep on like this we'll never be done. *) 
+   try to keep on like this we'll never be done. *)
 
 Theorem plus_n_O_secondtry : forall n:nat,
   n = n + 0.
@@ -124,23 +124,23 @@ Proof.
   induction n.
   + reflexivity.
   + simpl. assumption.
-Qed. 
+Qed.
 
 
 Lemma plus1_S_equiv : forall n:nat, S n = n+1.
 Proof.
-  intros. induction n. 
+  intros. induction n.
   + reflexivity.
   + simpl. rewrite <- IHn. reflexivity.
-Qed. 
+Qed.
 
-Theorem plus_n_Sm : forall n m : nat, 
+Theorem plus_n_Sm : forall n m : nat,
   S (n + m) = n + (S m).
 Proof.
   induction n.
   + simpl. reflexivity.
-  + intros. simpl. rewrite <- IHn. reflexivity. 
-Qed. 
+  + intros. simpl. rewrite <- IHn. reflexivity.
+Qed.
 
 
 
@@ -151,8 +151,8 @@ Proof.
   + simpl. induction m.
     - reflexivity.
     - simpl. rewrite <- IHm. reflexivity.
-  + rewrite <-  plus_n_Sm. simpl. rewrite IHn. reflexivity.      
-Qed. 
+  + rewrite <-  plus_n_Sm. simpl. rewrite IHn. reflexivity.
+Qed.
 
 
 Theorem plus_assoc : forall n m p : nat,
@@ -160,8 +160,8 @@ Theorem plus_assoc : forall n m p : nat,
 Proof.
   intros. induction n.
   + simpl.  reflexivity.
-  + simpl. rewrite IHn. reflexivity. 
-Qed. 
+  + simpl. rewrite IHn. reflexivity.
+Qed.
 (** [] *)
 
 (** **** Exercise: 2 stars (double_plus)  *)
@@ -181,7 +181,7 @@ Proof.
   induction n.
   + reflexivity.
   + simpl. rewrite IHn. rewrite plus_n_Sm. reflexivity.
-Qed.     
+Qed.
 
 (** [] *)
 
@@ -195,20 +195,20 @@ Qed.
 Theorem evenb_S : forall n : nat,
   evenb (S n) = negb (evenb n).
 Proof.
-  intros. 
-  induction n. 
+  intros.
+  induction n.
   + simpl. reflexivity.
   + rewrite IHn. simpl.
     assert (H: forall x, negb (negb x) = x).
     intros. induction x.
     - reflexivity.
     - reflexivity.
-    - rewrite H.  reflexivity.   
-Qed. 
+    - rewrite H.  reflexivity.
+Qed.
 (** [] *)
 
 (** **** Exercise: 1 star (destruct_induction)  *)
-(** Briefly explain the difference between the tactics [destruct] 
+(** Briefly explain the difference between the tactics [destruct]
     and [induction].
 
 (* FILL IN HERE *)
@@ -299,8 +299,8 @@ Theorem plus_swap : forall n m p : nat,
   n + (m + p) = m + (n + p).
 Proof.
   intros.  rewrite plus_assoc.
-  rewrite plus_assoc.  rewrite (plus_comm n m). reflexivity. 
-Qed. 
+  rewrite plus_assoc.  rewrite (plus_comm n m). reflexivity.
+Qed.
   (** Now prove commutativity of multiplication.  (You will probably
     need to define and prove a separate subsidiary theorem to be used
     in the proof of this one.  You may find that [plus_swap] comes in
@@ -312,13 +312,13 @@ Proof.
   intros. induction  n.
   + simpl. induction m.
     - reflexivity.
-    - simpl. assumption. 
+    - simpl. assumption.
   + simpl mult. rewrite <- IHn.
-     pattern m at 2. 
+     pattern m at 2.
     assert (mult_x_1 : forall x, x = x * 1).
     - induction x. reflexivity. simpl.  rewrite <- IHx. reflexivity.
-    - rewrite mult_x_1 with (x := m).  
-      rewrite <- mult_plus_distr_l.  simpl. reflexivity. 
+    - rewrite mult_x_1 with (x := m).
+      rewrite <- mult_plus_distr_l.  simpl. reflexivity.
 Qed.
       (** [] *)
 
@@ -337,7 +337,7 @@ Proof.
   intros. induction n.
   + simpl.  reflexivity.
   + simpl. assumption.
-Qed.     
+Qed.
 
 
 Theorem zero_nbeq_S : forall n:nat,
@@ -346,14 +346,14 @@ Proof.
   induction n.
   + reflexivity.
   + simpl. reflexivity.
-Qed.     
+Qed.
 
 
 Theorem andb_false_r : forall b : bool,
   andb b false = false.
 Proof.
   intros. simpl. destruct b. reflexivity. reflexivity.
-Qed.   
+Qed.
 
 
 Theorem plus_ble_compat_l : forall n m p : nat,
@@ -362,7 +362,7 @@ Proof.
   intros. induction p.
   + simpl. assumption.
   + simpl. assumption.
-Qed.     
+Qed.
 
 
 Theorem S_nbeq_0 : forall n:nat,
@@ -435,9 +435,9 @@ Proof.
                 v                           v
                nat ---------- S ---------> nat
 
-    That is, incrementing a binary number and then converting it to 
+    That is, incrementing a binary number and then converting it to
     a (unary) natural number yields the same result as first converting
-    it to a natural number and then incrementing.  
+    it to a natural number and then incrementing.
     Name your theorem [bin_to_nat_pres_incr] ("pres" for "preserves").
 
     Before you start working on this exercise, please copy the

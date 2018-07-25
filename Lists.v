@@ -165,10 +165,10 @@ Definition mylist3 := [1;2;3].
    will be parsed, as we'd expect, as [(1 + 2) :: [3]] rather than [1
    + (2 :: [3])].
 
-   (Expressions like "[1 + 2 :: [3]]" can be a little confusing when 
-   you read them in a .v file.  The inner brackets, around 3, indicate 
-   a list, but the outer brackets, which are invisible in the HTML 
-   rendering, are there to instruct the "coqdoc" tool that the bracketed 
+   (Expressions like "[1 + 2 :: [3]]" can be a little confusing when
+   you read them in a .v file.  The inner brackets, around 3, indicate
+   a list, but the outer brackets, which are invisible in the HTML
+   rendering, are there to instruct the "coqdoc" tool that the bracketed
    part should be displayed as Coq code rather than running text.)
 
    The second and third [Notation] declarations above introduce the
@@ -260,7 +260,7 @@ Proof. reflexivity.  Qed.
 
 Fixpoint nonzeros (l:natlist) : natlist :=
   match l with
-  | nil => nil  
+  | nil => nil
   | 0::t => nonzeros t
   | h::t => h::(nonzeros t)
   end.
@@ -278,19 +278,19 @@ Fixpoint oddmembers (l:natlist) : natlist :=
   |nil => nil
   | h::t => if oddb h then h::(oddmembers t) else oddmembers t
   end.
-  (* FILL IN HERE *) 
+  (* FILL IN HERE *)
 
 Example test_oddmembers:
   oddmembers [0;1;0;2;3;0;0] = [1;3].
 Proof.
   simpl. reflexivity.
   Qed.
-  
+
   (* FILL IN HERE *)
 
 Fixpoint countoddmembers (l:natlist) : nat :=
   length (oddmembers l).
-  (* FILL IN HERE *) 
+  (* FILL IN HERE *)
 
 Example test_countoddmembers1:
   countoddmembers [1;0;3;1;4;5] = 4.
@@ -379,7 +379,7 @@ Definition bag := natlist.
     [count], [sum], [add], and [member] for bags. *)
 
 
-Fixpoint count (v:nat) (s:bag) : nat := 
+Fixpoint count (v:nat) (s:bag) : nat :=
   match s with
   | nil => O
   | h :: t => match beq_nat h v with
@@ -826,7 +826,7 @@ Proof.
 
     Coq's [SearchAbout] command is quite helpful with this.  Typing
     [SearchAbout foo] will cause Coq to display a list of all theorems
-    involving [foo].  For example, try uncommenting the following line 
+    involving [foo].  For example, try uncommenting the following line
     to see a list of theorems that we have proved about [rev]: *)
 
 (*  SearchAbout rev. *)
@@ -850,7 +850,7 @@ Proof.
   intros. induction l as [|h t IHl1].
   - simpl. reflexivity.
   - simpl. rewrite -> IHl1. reflexivity.
-Qed.    
+Qed.
 
 Theorem rev_tail : forall h: nat, forall t: natlist,
       rev(h::t) = rev(t) ++ [h].
@@ -867,7 +867,7 @@ Proof.
  - simpl. rewrite <- rev_tail. rewrite -> rev_tail. rewrite -> IHl1. rewrite -> app_assoc.
    reflexivity.
 Qed.
-           
+
 Theorem rev_involutive : forall l : natlist,
   rev (rev l) = l.
 Proof.
@@ -913,7 +913,7 @@ Fixpoint beq_natlist (l1 l2 : natlist) : bool :=
              | nil => false
              | h2::t2 => if (beq_nat h1 h2) then beq_natlist t1 t2 else false
              end
-  end.             
+  end.
 
 
 Example test_beq_natlist1 :
@@ -936,8 +936,8 @@ Proof.
   intros. induction n.
   - simpl. reflexivity.
   - simpl.  rewrite <- IHn. reflexivity.
-Qed.    
-  
+Qed.
+
 
 Theorem beq_natlist_refl : forall l:natlist,
   true = beq_natlist l l.
@@ -945,7 +945,7 @@ Proof.
   intros. induction l as [|h t IHl].
   - simpl. reflexivity.
   - simpl. rewrite <- beq_self. rewrite <- IHl. reflexivity.
-Qed.    
+Qed.
   (** [] *)
 
 (* ###################################################### *)
@@ -961,7 +961,7 @@ Proof.
   intros. induction s as [|h t IHs].
   - simpl. reflexivity.
   - simpl. reflexivity.
-Qed.    
+Qed.
 
 
 (** The following lemma about [leb] might help you in the next proof. *)
@@ -1158,7 +1158,7 @@ Qed.
 
 Module PartialMap.
 Import NatList.
-  
+
 Inductive partial_map : Type :=
   | empty  : partial_map
   | record : id -> nat -> partial_map -> partial_map.
@@ -1203,7 +1203,7 @@ Qed.
 
 (** **** Exercise: 1 star (update_neq)  *)
 Theorem update_neq :
-  forall (d : partial_map) (m n : id) (o: nat), 
+  forall (d : partial_map) (m n : id) (o: nat),
     beq_id m n = false -> find m (update d n o) = find m d.
 Proof.
   intros. simpl. rewrite -> H. reflexivity.

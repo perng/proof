@@ -144,7 +144,7 @@ Proof.
   - (* 2 + 2 = 4 *) reflexivity.
 Qed.
 
-Require Peano. 
+Require Peano.
 (** **** Exercise: 2 stars (and_exercise)  *)
 Example and_exercise :
   forall n m : nat, n + m = 0 -> n = 0 /\ m = 0.
@@ -154,8 +154,8 @@ Proof.
   - simpl. intros. split. reflexivity. assumption.
   - intros. split. inversion H. reflexivity.
   - intros. inversion H.
-Qed.     
-      
+Qed.
+
 
 (** [] *)
 
@@ -171,7 +171,7 @@ Qed.
 Lemma and_example2 :
   forall n m : nat, n = 0 /\ m = 0 -> n + m = 0.
 Proof.
-  intros n m H. 
+  intros n m H.
   destruct H as [Hn Hm].
   rewrite Hn. rewrite Hm.
   reflexivity.
@@ -230,8 +230,8 @@ Proof.
 Lemma proj2 : forall P Q : Prop,
   P /\ Q -> Q.
 Proof.
-  intros. destruct H. assumption. 
-Qed. 
+  intros. destruct H. assumption.
+Qed.
 (** [] *)
 
 (** Finally, we sometimes need to rearrange the order of conjunctions
@@ -248,7 +248,7 @@ Proof.
     - (* left *) apply HQ.
     - (* right *) apply HP.
 Qed.
-  
+
 (** **** Exercise: 2 stars (and_assoc)  *)
 (** (In the following proof of associativity, notice how the _nested_
     intro pattern breaks the hypothesis [H : P /\ (Q /\ R)] down into
@@ -258,9 +258,9 @@ Qed.
 Theorem and_assoc : forall P Q R : Prop,
   P /\ (Q /\ R) -> (P /\ Q) /\ R.
 Proof.
-  intros P Q R [HP [HQ HR]].  
+  intros P Q R [HP [HQ HR]].
   split. split.  assumption. assumption. assumption.
-Qed.  
+Qed.
 
 (** [] *)
 
@@ -335,7 +335,7 @@ Proof.
   - intros. left. reflexivity.
   - intros. right. reflexivity.
   - intros.   left. inversion H.
-Qed.     
+Qed.
 
 (** [] *)
 
@@ -344,7 +344,7 @@ Theorem or_commut : forall P Q : Prop,
   P \/ Q  -> Q \/ P.
 Proof.
   intros. destruct H. right. assumption. left. assumption.
-Qed. 
+Qed.
 
 (** [] *)
 
@@ -401,7 +401,7 @@ Fact not_implies_our_not : forall (P:Prop),
   ~ P -> (forall (Q:Prop), P -> Q).
 Proof.
   intros. destruct H. assumption.
-Qed. 
+Qed.
 
 (** [] *)
 
@@ -467,15 +467,15 @@ Theorem contrapositive : forall P Q : Prop,
   (P -> Q) -> (~Q -> ~P).
 Proof.
   intros. unfold not. intros. apply H in H1. destruct H0. assumption.
-Qed. 
+Qed.
 (** [] *)
 
 (** **** Exercise: 1 star (not_both_true_and_false)  *)
 Theorem not_both_true_and_false : forall P : Prop,
   ~ (P /\ ~P).
 Proof.
-  intros. unfold not. intros. destruct H. apply H0. assumption. 
-Qed. 
+  intros. unfold not. intros. destruct H. apply H0. assumption.
+Qed.
 
 (** [] *)
 
@@ -581,15 +581,15 @@ Theorem iff_refl : forall P : Prop,
   P <-> P.
 Proof.
   intros. split. intros. assumption. intros. assumption.
-Qed.   
+Qed.
 
 
 Theorem iff_trans : forall P Q R : Prop,
   (P <-> Q) -> (Q <-> R) -> (P <-> R).
 Proof.
-  intros P Q R [H11 H12] [H21 H22]. split. intros.  apply H21. apply H11. assumption. 
+  intros P Q R [H11 H12] [H21 H22]. split. intros.  apply H21. apply H11. assumption.
   intros. apply H12. apply H22. assumption.
-Qed.   
+Qed.
   (** [] *)
 
 (** **** Exercise: 3 stars (or_distributes_over_and)  *)
@@ -597,10 +597,10 @@ Theorem or_distributes_over_and : forall P Q R : Prop,
   P \/ (Q /\ R) <-> (P \/ Q) /\ (P \/ R).
 Proof.
   intros. split.
-  -  intros. destruct H. split. left. assumption. left. assumption. destruct H. split. 
+  -  intros. destruct H. split. left. assumption. left. assumption. destruct H. split.
      right. assumption.  right. assumption.
   - intros. destruct H.  destruct H. left. assumption. destruct H0. left. assumption. right. split. assumption.  assumption.
-Qed.     
+Qed.
 (** [] *)
 
 (** Some of Coq's tactics treat [iff] statements specially, avoiding
@@ -716,7 +716,7 @@ Proof.
   intros. split.
   - intros. destruct H. destruct H. left. exists x. assumption. right. exists x. assumption.
   - intros [H1 | H2]. destruct H1. exists x. left. assumption.  destruct H2. exists x. right. assumption.
-Qed.     
+Qed.
 
 Print dist_exists_or.
 (** [] *)
@@ -745,7 +745,7 @@ Fixpoint In {A : Type} (x : A) (l : list A) : Prop :=
   match l with
   | nil => False
   | h::t => h = x \/ In x t
-  end. 
+  end.
 
 (** When [In] is applied to a concrete list, it expands into a
     concrete sequence of nested conjunctions. *)
@@ -805,12 +805,12 @@ Proof.
   - intros. induction l.
     + simpl in H. destruct H.
     + simpl in H. destruct H. exists x. split. assumption. simpl. left. reflexivity.
-      apply IHl in H. destruct H.  exists x0. destruct H.  split. assumption. simpl. right. assumption. 
+      apply IHl in H. destruct H.  exists x0. destruct H.  split. assumption. simpl. right. assumption.
   - intros. destruct H. destruct H. rewrite <- H.  induction l.
     + simpl. destruct H0.
     + destruct H0. rewrite <- H0.   unfold map.  simpl.  left.  reflexivity. simpl. right. apply IHl. apply H0.
-Qed.       
-     
+Qed.
+
 (** [] *)
 
 (** **** Exercise: 2 stars (in_app_iff)  *)
@@ -827,7 +827,7 @@ Proof.
   - intros [H1 | H2].
     + induction l. destruct H1. simpl. destruct H1. left. assumption. apply IHl in H. right.  apply H.
     + induction l. simpl. assumption. simpl. right. assumption.
-Qed.       
+Qed.
 
 (** [] *)
 
@@ -862,8 +862,8 @@ Proof.
   + intros.  induction l.
     -  destruct H0.
     -  destruct H0. simpl in H. destruct H. rewrite <- H0.  assumption.  apply IHl. simpl in H. destruct H. assumption. assumption.
-Qed.        
-       
+Qed.
+
 
 
 (** **** Exercise: 3 stars (combine_odd_even)  *)
@@ -884,7 +884,7 @@ Print oddb.
 Print evenb.
 
 (** To test your definition, prove the following facts: *)
-  
+
 Theorem combine_odd_even_intro :
   forall (Podd Peven : nat -> Prop) (n : nat),
     (oddb n = true -> Podd n) ->
@@ -894,8 +894,8 @@ Proof.
   intros P Q n h1 h2. unfold combine_odd_even. destruct (oddb n).
   + apply h1. reflexivity.
   + apply h2. reflexivity.
-Qed. 
-  
+Qed.
+
 Theorem combine_odd_even_elim_odd :
   forall (Podd Peven : nat -> Prop) (n : nat),
     combine_odd_even Podd Peven n ->
@@ -904,7 +904,7 @@ Theorem combine_odd_even_elim_odd :
 Proof.
   intros. unfold combine_odd_even in H. destruct (oddb n).
   assumption. exfalso. inversion H0.
-Qed.   
+Qed.
 
 Theorem combine_odd_even_elim_even :
   forall (Podd Peven : nat -> Prop) (n : nat),
@@ -915,7 +915,7 @@ Proof.
   intros. unfold combine_odd_even in H. destruct (oddb n).
   + inversion H0.
   + assumption.
-Qed.    
+Qed.
 
 (** [] *)
 
@@ -1004,7 +1004,7 @@ Proof.
   reflexivity.
 Qed.
 
-Check plus_comm3_take2. 
+Check plus_comm3_take2.
 (** You can "use theorems as functions" in this way with almost all
     tactics that take a theorem name as an argument.  Note also that
     theorem application uses the same inference mechanisms as function
@@ -1146,7 +1146,7 @@ Definition tr_rev {X} (l : list X) : list X :=
     call); a decent compiler will generate very efficient code in this
     case.  Prove that both definitions are indeed equivalent. *)
 
-Check tr_rev. 
+Check tr_rev.
 
 Lemma tr_rev_correct : forall X, @tr_rev X = @rev X.
 (* FILL IN HERE *) Admitted.
@@ -1183,7 +1183,7 @@ Proof.
   +  rewrite evenb_S. destruct (evenb n).
   - simpl. destruct IHn as [x IHn]. rewrite  IHn. exists x.   reflexivity.
   - simpl. destruct IHn as [x IHn]. rewrite IHn.  exists (S x).  simpl. reflexivity.
-Qed.     
+Qed.
   (* Hint: Use the [evenb_S] lemma from [Induction.v]. *)
 
 (** [] *)
@@ -1303,7 +1303,7 @@ Proof.
   + split. destruct b1. reflexivity. destruct H. reflexivity.
     destruct b1. destruct H. simpl.  reflexivity.  simpl in H. inversion H.
   + intros. destruct H. rewrite H. rewrite H0. reflexivity.
-Qed.     
+Qed.
 
 
 Lemma orb_true_iff : forall b1 b2,
@@ -1312,10 +1312,10 @@ Proof.
   intros. split. destruct b1.
   +  simpl. intros. left. reflexivity.
   + intros.  destruct b2.
-    - right. reflexivity. 
+    - right. reflexivity.
     - destruct H.  simpl.  left.  reflexivity.
       + intros. destruct H. rewrite H. simpl. reflexivity. rewrite H. simpl. destruct b1.  simpl. reflexivity. simpl. reflexivity.
-Qed.         
+Qed.
 
 
 (** [] *)
@@ -1332,9 +1332,9 @@ Proof.
   + intros h1 h2.
     rewrite h2 in h1. rewrite <- beq_nat_refl in h1. inversion h1.
   + intros h1. destruct (beq_nat x y) eqn:x_eq_y.
-    - apply beq_nat_true in x_eq_y. elim h1. assumption. 
-    - reflexivity. 
-Qed. 
+    - apply beq_nat_true in x_eq_y. elim h1. assumption.
+    - reflexivity.
+Qed.
 
 (** Exercise: 3 stars (beq_list)  *)
 (** Given a boolean operator [beq] for testing equality of elements of
@@ -1349,7 +1349,7 @@ Fixpoint beq_list {A} (beq : A -> A -> bool)
     | nil => match l2  with
              | nil => true
              | t2::l2 => false
-             end              
+             end
     | h1 :: t1 =>
       match l2 with
       | nil => false
@@ -1381,35 +1381,35 @@ Proof.
         apply andb_true_iff.
         injection h2 as h3 h4.
         split. rewrite h1. assumption.
-        rewrite -> IHl1.  assumption. 
+        rewrite -> IHl1.  assumption.
 Qed.
         (**
-  intros. induction l1. 
+  intros. induction l1.
   + induction l2.
-    - simpl. split;  intros; reflexivity. 
+    - simpl. split;  intros; reflexivity.
     - simpl. split; intros; inversion H0.
-  + induction l2 as [|b l2]. 
+  + induction l2 as [|b l2].
     - split. inversion 1.  intros; inversion H0.
-    - simpl. split.      
-      * intros. apply andb_true_iff in H0.  destruct H0.  apply H in H0. rewrite H0. 
+    - simpl. split.
+      * intros. apply andb_true_iff in H0.  destruct H0.  apply H in H0. rewrite H0.
     * intros. inversion H0.
-  + induction l2. split; split. 
+  + induction l2. split; split.
     - intros. inversion H0.
     - intros. inversion H0.
     - split.
       * intros. inversion H0. apply andb_true_iff in H2. destruct H2. apply H in H1. rewrite H1.
-        destruct H0. injuection H2. 
-      
+        destruct H0. injuection H2.
+
     reflexivity.     intros. induction l1.
-    - induction l2. 
+    - induction l2.
       *  reflexivity.
-      * inversion H0.    
+      * inversion H0.
     - induction l2.
       * inversion 1.  destruct H0. inversion H0.
     - inversion H0.
     - inversion H0. rewrite andb_true_iff in H2.  destruct H2.  apply H in H1. rewrite H1.
-      
-      destruct H2. 
+
+      destruct H2.
 *)
 
 (** [] *)
@@ -1430,7 +1430,7 @@ Fixpoint forallb {X : Type} (test : X -> bool) (l : list X) : bool :=
 Theorem forallb_true_iff : forall X test (l : list X),
    forallb test l = true <-> All (fun x => test x = true) l.
 Proof.
-  intros. split. 
+  intros. split.
   + intros.  induction l.
     - simpl. reflexivity.
     - simpl.  simpl in H. rewrite  andb_true_iff in H. destruct H.  split. assumption.  apply IHl.  assumption.
@@ -1557,8 +1557,8 @@ Theorem excluded_middle_irrefutable:  forall (P:Prop),
   ~ ~ (P \/ ~ P).
 Proof.
   unfold not.
-  intros. apply H. right. intros. apply H. left. assumption. 
-Qed. 
+  intros. apply H. right. intros. apply H. left. assumption.
+Qed.
   (** [] *)
 
 (** **** Exercise: 3 stars, optional (not_exists_dist)  *)
@@ -1580,8 +1580,8 @@ Theorem not_exists_dist :
 Proof.
   cbv. intros em X P h2 x. destruct  (em (P x)). assumption. elim h2.
   exists x.  assumption.
-Qed.   
-  
+Qed.
+
 Check not_exists_dist.
 (** [] *)
 
@@ -1604,11 +1604,11 @@ Definition double_negation_elimination := forall P:Prop,
 
 Definition de_morgan_not_and_not := forall P Q:Prop,
   ~(~P /\ ~Q) -> P\/Q.
-  
+
 Definition implies_to_or := forall P Q:Prop,
   (P->Q) -> (~P\/Q).
 
-Check implies_to_or. 
+Check implies_to_or.
 Theorem peirce_double_neg_elim : peirce -> double_negation_elimination.
 Proof.
   cbv. intros. specialize (H P False). apply H. intros. contradiction.
@@ -1616,17 +1616,17 @@ Qed.
 
 
 Theorem double_negation_elimination_de_morgan_not_and_not: double_negation_elimination -> de_morgan_not_and_not.
-Proof. 
+Proof.
   intros dne P Q H.  red in dne.
    apply dne.  intro H2. apply H.
    split. intro H3. apply H2. left. assumption.  intro H3.   apply H2. right. assumption.
-Qed. 
+Qed.
 
 Check double_negation_elimination_de_morgan_not_and_not.
 
 Theorem de_morgan_not_and_not_implies_to_or:
   de_morgan_not_and_not -> implies_to_or.
-Proof. 
+Proof.
   intros dm P Q H. red in dm. apply dm.  hnf.  intros [nnp nq].
   apply nnp. intro H2. apply H in H2.  contradiction.
 Qed.
@@ -1635,8 +1635,8 @@ Theorem implies_to_or_excluded_middle: implies_to_or -> excluded_middle.
 Proof.
   intros.  red. intros. red in H. specialize (H (P) P).
   rewrite or_comm.
-  apply H.  intros. assumption. 
-Qed. 
+  apply H.  intros. assumption.
+Qed.
 
 Check implies_to_or_excluded_middle.
 
@@ -1646,7 +1646,7 @@ Proof.
   assumption. apply H. intros. contradiction.
 Qed.
 
-Check excluded_middle_peirce. 
+Check excluded_middle_peirce.
 (** [] *)
 
 (** $Date: 2015-08-11 12:03:04 -0400 (Tue, 11 Aug 2015) $ *)
