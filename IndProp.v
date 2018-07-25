@@ -688,7 +688,7 @@ Proof.
     + apply le_S in H1. apply le_S in H1. assumption.
 Qed.      
    
-heorem leb_complete : forall n m,
+Theorem leb_complete : forall n m,
   leb n m = true -> n <= m.
 Proof.
   (* FILL IN HERE *) Admitted.
@@ -708,7 +708,7 @@ Theorem leb_true_trans : forall n m o,
   leb n m = true -> leb m o = true -> leb n o = true.
 Proof.
   intros.
-  rewrite <- leb_correct.
+  
 (* FILL IN HERE *) Admitted.
 
 (** **** Exercise: 2 stars, optional (leb_iff)  *)
@@ -754,10 +754,15 @@ Inductive R : nat -> nat -> nat -> Prop :=
     in Coq? *)
 
 Definition fR : nat -> nat -> nat :=
-  (* FILL IN HERE *) admit.
+  fun (m n: nat) => m+n.  
+
 
 Theorem R_equiv_fR : forall m n o, R m n o <-> fR m n = o.
 Proof.
+  intros. split.
+  + unfold fR. induction m.
+    ++ 
+  
 (* FILL IN HERE *) Admitted.
 (** [] *)
 
