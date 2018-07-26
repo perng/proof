@@ -1,7 +1,7 @@
  (** * IndProp: Inductively Defined Propositions *)
 
 Require Export Arith.
-Require Export Induction. 
+Require Export Induction.
 Require Export Logic.
 
 
@@ -18,7 +18,7 @@ Require Export Logic.
     double k].  Yet another possibility is to say that [n] is even if
     we can establish its evenness from the following rules:
 
-       - Rule [ev_0]: The number [0] is even. 
+       - Rule [ev_0]: The number [0] is even.
        - Rule [ev_SS]: If [n] is even, then [S (S n)] is even.
 
     To illustrate how this new definition of evenness works, let's use
@@ -136,7 +136,7 @@ Proof.
   + simpl. apply ev_0.
   + simpl. apply ev_SS. assumption.
 
-Qed.     
+Qed.
 
 (** [] *)
 
@@ -175,7 +175,7 @@ Qed.
 
 Theorem evenb_minus2: forall n,
   evenb n = true -> evenb (pred (pred n)) = true.
-Proof.  
+Proof.
   intros [ | [ | n' ] ].
   - (* n = 0 *) reflexivity.
   - (* n = 1; contradiction *) intros H. inversion H.
@@ -299,7 +299,7 @@ Theorem SSSSev__even : forall n,
 Proof.
   intros n E. inversion E as [|n' E'].
   inversion E' as [|n'' E'']. apply E''.
-Qed.   
+Qed.
 
 
 Theorem even5_nonsense :
@@ -307,7 +307,7 @@ Theorem even5_nonsense :
 Proof.
   simpl.  intros. exfalso.
   inversion H.  inversion H1. inversion H3.
-Qed. 
+Qed.
 
 
 (** The way we've used [inversion] here may seem a bit
@@ -434,8 +434,8 @@ Qed.
 Theorem ev_sum : forall n m, ev n -> ev m -> ev (n + m).
 Proof.
   intros. induction H.
-  + simpl.  assumption. 
-  + simpl.  apply ev_SS. assumption. 
+  + simpl.  assumption.
+  + simpl.  apply ev_SS. assumption.
 Qed.
 
 (** [] *)
@@ -464,7 +464,7 @@ Proof.
    - apply ev'_0.
    - rewrite plus1_S_equiv. rewrite plus1_S_equiv. rewrite <- plus_assoc.
      simpl.  apply ev'_sum. assumption. apply ev'_2.
-Qed. 
+Qed.
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced, recommended (ev_ev__ev)  *)
@@ -478,7 +478,7 @@ Proof.
   + rewrite <- plus_O_n. assumption.
   + apply IHev. rewrite plus_Sn_m in H.  simpl in H.
     apply evSS_ev. assumption.
-Qed.     
+Qed.
 
 (** [] *)
 
@@ -494,8 +494,8 @@ Proof.
   assert (G: (n+m) +(n+p) = (n+n)+(m+p)).  rewrite <- (plus_assoc  n m).
   rewrite (plus_assoc m n p). rewrite (plus_comm m n). rewrite <- plus_assoc.  rewrite <- plus_assoc.
   reflexivity.
-  assert (ev (n+n)). rewrite  <- double_plus. apply ev_double. 
-  apply (ev_ev__ev (n+n) (m+p)).  rewrite <- G. assumption.  assumption. 
+  assert (ev (n+n)). rewrite  <- double_plus. apply ev_double.
+  apply (ev_ev__ev (n+n) (m+p)).  rewrite <- G. assumption.  assumption.
 Qed.
   (** [] *)
 
@@ -582,7 +582,7 @@ Inductive next_even : nat -> nat -> Prop :=
     between every pair of natural numbers. *)
 
 Inductive total_relation : nat -> nat -> Prop :=
-| tr : forall n m: nat, total_relation n m. 
+| tr : forall n m: nat, total_relation n m.
 
 Example tr_1: total_relation 7 2.
 Proof. apply tr. Qed.
@@ -622,14 +622,14 @@ Proof.
   intros. induction n.
   + apply le_n.
   + apply le_S. assumption.
-Qed.    
+Qed.
 
 Theorem n_le_m__Sn_le_Sm : forall n m,
   n <= m -> S n <= S m.
 Proof.
   intros.
   induction m.
-  + inversion H. apply le_n.   
+  + inversion H. apply le_n.
   + inversion H. apply le_n. apply IHm in H1. apply le_S in H1.
     assumption.
 Qed.
@@ -645,8 +645,8 @@ Proof.
   + inversion H.
     - apply le_n.
     - apply le_S. apply IHm. assumption.
-Qed.      
-        
+Qed.
+
 
 
 Theorem le_plus_l : forall a b,
@@ -656,7 +656,7 @@ Proof.
   induction b.
   + rewrite <- plus_n_O. apply le_n.
   + rewrite <- plus_n_Sm.  apply le_S. assumption.
-Qed.    
+Qed.
 
 Theorem plus_lt : forall n1 n2 m,
   n1 + n2 < m ->
@@ -687,7 +687,7 @@ Proof.
     + apply le_S. apply le_n.
     + apply le_S in H1. apply le_S in H1. assumption.
 Qed.      
-   
+
 Theorem leb_complete : forall n m,
   leb n m = true -> n <= m.
 Proof.
@@ -708,7 +708,6 @@ Theorem leb_true_trans : forall n m o,
   leb n m = true -> leb m o = true -> leb n o = true.
 Proof.
   intros.
-  
 (* FILL IN HERE *) Admitted.
 
 (** **** Exercise: 2 stars, optional (leb_iff)  *)
@@ -746,7 +745,15 @@ Inductive R : nat -> nat -> nat -> Prop :=
 
 (* FILL IN HERE *)
 []
-*)
+ *)
+Example r_1_1_2: R  1 1 2.
+Proof.
+  apply c5. apply c3. apply c5. apply c3. apply c1.
+Qed.
+
+Example r_2_2_6 : R 2 2 6.
+Proof.
+  apply c3. apply c2. apply c2. apply c5. apply c2. Admitted.
 
 (** **** Exercise: 3 stars, optional (R_fact)  *)
 (** The relation [R] above actually encodes a familiar function.
@@ -754,16 +761,31 @@ Inductive R : nat -> nat -> nat -> Prop :=
     in Coq? *)
 
 Definition fR : nat -> nat -> nat :=
-  fun (m n: nat) => m+n.  
+  fun  (m n: nat) => m+n.
+
+Lemma R_O_n_n: forall n, R 0 n n.
+Proof.
+  intros. induction n.
+  + apply c1.
+  + apply c3. assumption.
+Qed.
 
 
 Theorem R_equiv_fR : forall m n o, R m n o <-> fR m n = o.
 Proof.
   intros. split.
-  + unfold fR. induction m.
-    ++ 
-  
-(* FILL IN HERE *) Admitted.
+  + intros. unfold fR. induction H.
+    ++ reflexivity.
+    ++ simpl. rewrite IHR. reflexivity.
+    ++ rewrite plus_comm. simpl.  rewrite plus_comm.  rewrite IHR. reflexivity.
+    ++ rewrite <- plus_n_Sm in IHR. rewrite  plus_Sn_m in IHR. inversion IHR. reflexivity.
+    ++ rewrite plus_comm. assumption.
+  + intros. unfold fR in H.  induction H.
+    induction m.
+    ++ rewrite plus_O_n. apply R_O_n_n.
+    ++ simpl. apply c2. assumption.
+Qed.
+
 (** [] *)
 
 End R.
@@ -834,7 +856,7 @@ End R.
     already seen, and does not seem to offer any concrete benefit over
     them.  To give a better sense of the power of inductive
     definitions, we now show how to use them to model a classic
-    concept in computer science: _regular expressions_. 
+    concept in computer science: _regular expressions_.
 
     Regular expressions are a simple language for describing strings,
     defined as elements of the following inductive type.  (The names
@@ -901,10 +923,14 @@ Inductive exp_match {T} : list T -> reg_exp T -> Prop :=
               exp_match s1 re1 ->
               exp_match s1 (Union re1 re2)
 | MUnionR : forall re1 s2 re2,
-              exp_match s2 re2 ->
+    exp_match s2 re2 ->
+    
               exp_match s2 (Union re1 re2)
 | MStar0 : forall re, exp_match [] (Star re)
 | MStarApp : forall s1 s2 re,
+
+
+    
                exp_match s1 re ->
                exp_match s2 (Star re) ->
                exp_match (s1 ++ s2) (Star re).
@@ -1296,7 +1322,7 @@ Proof.
     informally, that any sufficiently long string [s] matching a
     regular expression [re] can be "pumped" by repeating some middle
     section of [s] an arbitrary number of times to produce a new
-    string also matching [re]. 
+    string also matching [re].
 
     To begin, we need to define "sufficiently long."  Since we are
     working in a constructive logic, we actually need to be able to
@@ -1641,27 +1667,27 @@ Inductive nostutter {X:Type} : list X -> Prop :=
 
 Example test_nostutter_1: nostutter [3;1;4;1;5;6].
 (* FILL IN HERE *) Admitted.
-(* 
+(*
   Proof. repeat constructor; apply beq_nat_false_iff; auto.
   Qed.
 *)
 
 Example test_nostutter_2:  nostutter (@nil nat).
 (* FILL IN HERE *) Admitted.
-(* 
+(*
   Proof. repeat constructor; apply beq_nat_false_iff; auto.
   Qed.
 *)
 
 Example test_nostutter_3:  nostutter [5].
 (* FILL IN HERE *) Admitted.
-(* 
+(*
   Proof. repeat constructor; apply beq_nat_false; auto. Qed.
 *)
 
 Example test_nostutter_4:      not (nostutter [3;1;1;4]).
 (* FILL IN HERE *) Admitted.
-(* 
+(*
   Proof. intro.
   repeat match goal with
     h: nostutter _ |- _ => inversion h; clear h; subst

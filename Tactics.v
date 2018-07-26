@@ -423,7 +423,7 @@ Proof.
   intros n. induction n as [| n'].
   - intros m. destruct m as [| m'].
     simpl.
-    reflexivity.    
+    reflexivity.
     simpl. intros H.
     inversion H.
   - intros m. destruct m as [| m'].
@@ -445,7 +445,7 @@ Qed.
     we want to show that the [double] function is injective -- i.e.,
     that it always maps different arguments to different results:
 
-    Theorem double_injective: forall n m, 
+    Theorem double_injective: forall n m,
       double n = double m -> n = m.
 
     The way we _start_ this proof is a bit delicate: if we begin witah
@@ -588,12 +588,12 @@ Proof.
 Theorem beq_nat_true : forall n m,
     beq_nat n m = true -> n = m.
 
-Proof.  
+Proof.
   intros n. induction n as  [|n'].
-  - destruct m as [|m'].    
+  - destruct m as [|m'].
     reflexivity.
     intros H. inversion H.
-  - destruct m as [|m'].    
+  - destruct m as [|m'].
     + intros H.
       inversion H.
     +   intros eq. apply IHn' in eq. rewrite -> eq. reflexivity.
@@ -705,7 +705,7 @@ Proof.
 
 (** Before we close this section and move on to some exercises, let's
     digress briefly and use [beq_nat_true] to prove a similar property
-    about identifiers that we'll need in later chapters: *) 
+    about identifiers that we'll need in later chapters: *)
 
 Theorem beq_id_true : forall x y,
   beq_id x y = true -> x = y.
@@ -727,7 +727,7 @@ Proof.
   - intros n eq. simpl. induction n.
     + simpl. inversion eq.
     + simpl.   apply IHl.  inversion eq.  reflexivity.
-Qed.       
+Qed.
 
 (** [] *)
 
@@ -744,8 +744,8 @@ Proof.
   - simpl. intros.  assumption.
   - simpl. intros. destruct n.
     + inversion H.
-    + apply f_equal. apply IHl1. inversion H.  rewrite -> H1.  reflexivity. 
-Qed. 
+    + apply f_equal. apply IHl1. inversion H.  rewrite -> H1.  reflexivity.
+Qed.
 
 (** [] *)
 
@@ -753,11 +753,11 @@ Theorem length_app_sym : forall (X:Type) (l1 l2 : list X) (x:X) (n:nat),
    length (l1 ++ l2) = n ->  length (l1 ++ (x::l2)) = S n.
 Proof.
   intros X l1. induction l1.
-  - simpl. intros. apply f_equal. assumption. 
-  - intros. simpl. apply f_equal. destruct n. 
+  - simpl. intros. apply f_equal. assumption.
+  - intros. simpl. apply f_equal. destruct n.
     + inversion H.
     + apply IHl1. inversion H. reflexivity.
-Qed. 
+Qed.
 (** **** Exercise: 4 stars, optional (app_length_twice)  *)
 (** Prove this by induction on [l], without using [app_length] from [Lists]. *)
 
@@ -765,19 +765,19 @@ Theorem app_length_twice : forall (X:Type) (n:nat) (l:list X),
      length l = n ->
      length (l ++ l) = n + n.
 Proof.
-  intros. generalize dependent n. 
+  intros. generalize dependent n.
   induction l as [|h t].
-  + simpl. intros n H. rewrite <- H. reflexivity. 
+  + simpl. intros n H. rewrite <- H. reflexivity.
   + intros n. induction n as [|n'].
     - simpl. intros H.  inversion H.
     - simpl. intros H.   inversion H.
       replace (length (t ++ h ::t)) with (S(length(t ++ t))).
-      rewrite IHt with (n := n'). 
+      rewrite IHt with (n := n').
       rewrite H1. rewrite plus_n_Sm.  reflexivity.
       assumption.
       rewrite <- app_length_cons with (X:=X) (l1:=t) (l2:=t) (x:=h).
-      reflexivity. reflexivity. 
- Qed. 
+      reflexivity. reflexivity.
+ Qed.
 
 (** [] *)
 
@@ -794,13 +794,13 @@ Theorem double_induction: forall (P : nat -> nat -> Prop),
 Proof.
   intros P h1 h2 h3 h4.
   induction m.
-  + induction n. 
+  + induction n.
     - assumption.
     - apply h3. assumption.
   + induction n.
-    - apply h2. apply IHm. 
-    - apply h4.  apply IHm. 
-Qed. 
+    - apply h2. apply IHm.
+    - apply h4.  apply IHm.
+Qed.
 
 (** [] *)
 
@@ -834,7 +834,7 @@ Proof.
     about multiplication at our disposal.  In particular, we know that
     it is commutative and associative, and from these facts it is not
     hard to finish the proof. *)
-  
+
   rewrite mult_assoc.
   assert (H : n * m * n = n * n * m).
   { rewrite mult_comm. apply mult_assoc. }
@@ -967,12 +967,12 @@ Proof.
 (** **** Exercise: 3 stars, optional (combine_split)  *)
 
 Print split.
-Print combine. 
+Print combine.
 
 Lemma head_eq : forall X (h1 h2:X) (t1 t2: list(X)),
     (h1::t1) = (h2::t2) -> h1=h2.
 Proof.
-  intros. inversion H. reflexivity. 
+  intros. inversion H. reflexivity.
 Qed.
 
 Theorem combine_split :
@@ -989,7 +989,7 @@ Proof.
     inversion h1.
     simpl.
     rewrite IHl'; reflexivity.
-Qed.   
+Qed.
 
 (** [] *)
 
@@ -1072,7 +1072,7 @@ Proof.
     - destruct (f false) eqn:eqfalse.
       * rewrite eqtrue. assumption.
       * rewrite eqfalse. assumption.
-Qed.         
+Qed.
 
 (** [] *)
 
@@ -1152,7 +1152,7 @@ Proof.
   + induction (beq_nat m n) eqn:mn.
   - apply beq_nat_true in mn. rewrite mn in nm. rewrite <- beq_nat_refl in nm. symmetry. assumption.
   - reflexivity.
-Qed.     
+Qed.
 
 (** [] *)
 
@@ -1175,7 +1175,7 @@ Theorem beq_nat_trans : forall n m p,
   beq_nat n p = true.
 Proof.
   intros.  apply beq_nat_true in H. apply beq_nat_true in H0.
-  rewrite <- H0.  rewrite <- H. symmetry. apply beq_nat_refl. 
+  rewrite <- H0.  rewrite <- H. symmetry. apply beq_nat_refl.
 Qed.
 
 (** [] *)
@@ -1191,18 +1191,18 @@ Qed.
     [combine]. Then, prove that the property holds. (Be sure to leave
     your induction hypothesis general by not doing [intros] on more
     things than necessary.  Hint: what property do you need of [l1]
-    and [l2] for [split] [combine l1 l2 = (l1,l2)] to be true?)  *)  
-  
+    and [l2] for [split] [combine l1 l2 = (l1,l2)] to be true?)  *)
+
 
 Definition split_combine_statement : Prop :=
   forall (X Y: Type) (l1: list X) (l2: list Y),
-    length l1 = length l2 -> split(combine l1 l2) = (l1, l2). 
+    length l1 = length l2 -> split(combine l1 l2) = (l1, l2).
 
 
 Theorem split_combine : split_combine_statement.
 Proof.
   unfold split_combine_statement.
-  intros X Y l1 l2 H.      
+  intros X Y l1 l2 H.
   induction l1 as [|h1 t1].
   + induction l2 as [|h2 t2].
     - reflexivity.
@@ -1211,8 +1211,8 @@ Proof.
     - inversion H.
     - simpl.  assert (fst (split (combine t1 t2)) = t1).
       destruct (combine t1 t2)  as [|l].
-      * 
-      
+      *
+
 (* FILL IN HERE *) Admitted.
 
 
@@ -1232,7 +1232,7 @@ Proof.
   + apply IHl. induction (test x0) eqn:Hx0.
   - simpl in  H0.  rewrite Hx0 in H0. inversion H0. rewrite H2 in Hx0.
     rewrite Hx0 in H. inversion H.
-  - simpl in H0.  rewrite Hx0 in H0. apply IHl in H0. inversion H0. 
+  - simpl in H0.  rewrite Hx0 in H0. apply IHl in H0. inversion H0.
 Qed.
 
 Theorem filter_exercise : forall (X : Type) (test : X -> bool)
@@ -1246,8 +1246,8 @@ Proof.
   + induction l.
   - inversion H.
   - assert (test x =false -> (filter test (x0::l) = x::lf -> False)).  apply filter_lemma.
-    exfalso. apply H0. assumption. assumption. 
-Qed.     
+    exfalso. apply H0. assumption. assumption.
+Qed.
 (** [] *)
 
 (** **** Exercise: 4 stars, advanced, recommended (forall_exists_challenge)  *)

@@ -50,7 +50,7 @@ Inductive list (X:Type) : Type :=
     [natlist] in the types of the constructors have been replaced by
     [list X].  (We can re-use the constructor names [nil] and [cons]
     because the earlier definition of [natlist] was inside of a
-    [Module] definition that is now out of scope.) 
+    [Module] definition that is now out of scope.)
 
     What sort of thing is [list] itself?  One good way to think
     about it is that [list] is a _function_ from [Type]s to
@@ -376,7 +376,7 @@ Proof.
   intros. induction l.
   - reflexivity.
   - simpl. rewrite -> IHl. reflexivity.
-Qed.    
+Qed.
 
 
 
@@ -386,7 +386,7 @@ Proof.
   intros. induction l.
   + simpl. reflexivity.
   + simpl. rewrite IHl. reflexivity.
-Qed.     
+Qed.
 
 
 Lemma app_length : forall (X:Type) (l1 l2 : list X),
@@ -396,7 +396,7 @@ Proof.
   induction l1.
   + simpl. reflexivity.
   + simpl. rewrite IHl1. reflexivity.
-Qed.    
+Qed.
 
 (** [] *)
 
@@ -412,7 +412,7 @@ Proof.
   + induction l2.
     - simpl. rewrite app_nil_r.  reflexivity.
     - simpl. rewrite IHl1. simpl. rewrite app_assoc. reflexivity.
-Qed.       
+Qed.
 
 
 Theorem rev_involutive : forall X : Type, forall l : list X,
@@ -421,7 +421,7 @@ Proof.
   intros. induction l.
   + reflexivity.
   + simpl. rewrite rev_app_distr.  simpl. rewrite IHl.  reflexivity.
-Qed.     
+Qed.
 
 (** [] *)
 
@@ -512,8 +512,8 @@ Fixpoint split {X Y : Type} (l : list (X*Y))
 Example test_split:
   split [(1,false);(2,false)] = ([1;2],[false;false]).
 Proof.
-  simpl. reflexivity. 
-Qed. 
+  simpl. reflexivity.
+Qed.
 (** [] *)
 
 (* ###################################################### *)
@@ -566,13 +566,13 @@ Check @hd_error.
 
 Example test_hd_error1 : hd_error [1;2] = Some 1.
 Proof.
-  reflexivity. 
+  reflexivity.
 Qed.
 
 Example test_hd_error2 : hd_error  [[1];[2]]  = Some [1].
 Proof.
   reflexivity.
-Qed.   
+Qed.
 (** [] *)
 
 (* ###################################################### *)
@@ -691,7 +691,7 @@ Proof. reflexivity.  Qed.
 
 
 
-Definition filter_even_gt7 (l : list nat) : list nat := 
+Definition filter_even_gt7 (l : list nat) : list nat :=
   filter (fun x => andb (evenb x) (leb 7 x)) l.
 
 (**  filter (fun n => andb (evenb n) (bgt_nat n 7)) l. *)
@@ -701,15 +701,15 @@ Definition filter_even_gt7 (l : list nat) : list nat :=
 Example test_filter_even_gt7_1 :
   (filter_even_gt7 [1;2;6;9;10;3;12;8;11]) = [10;12;8].
 Proof.
-    simpl. reflexivity. 
-Qed. 
+    simpl. reflexivity.
+Qed.
 
 
 Example test_filter_even_gt7_2 :
   filter_even_gt7 [5;2;6;19;129] = [].
 Proof.
   reflexivity.
-Qed.   
+Qed.
 (** [] *)
 
 (** **** Exercise: 3 stars (partition)  *)
@@ -734,14 +734,14 @@ Definition partition {X : Type}
                      (test : X -> bool)
                      (l : list X)
   : list X * list X :=
-  ((filter test l), (filter (composition test negb) l)). 
+  ((filter test l), (filter (composition test negb) l)).
 
 
 Example test_partition1: partition oddb [1;2;3;4;5] = ([1;3;5], [2;4]).
-Proof.  reflexivity. Qed. 
+Proof.  reflexivity. Qed.
 
 Example test_partition2: partition (fun x => false) [5;9;0] = ([], [5;9;0]).
-Proof.  reflexivity. Qed. 
+Proof.  reflexivity. Qed.
 
 (** [] *)
 
@@ -789,19 +789,19 @@ Proof. reflexivity.  Qed.
 
 Lemma map_app : forall (X Y : Type) (f: X-> Y) (a b :list X),
     map f (a++b) = (map f a) ++ (map f b).
-Proof.   
+Proof.
   intros. induction a.
   + reflexivity.
-  + simpl. rewrite IHa. reflexivity. 
+  + simpl. rewrite IHa. reflexivity.
 Qed.
-  
+
 Theorem map_rev : forall (X Y : Type) (f : X -> Y) (l : list X),
   map f (rev l) = rev (map f l).
 Proof.
   intros. induction l.
   + reflexivity.
-  + simpl. rewrite map_app. rewrite IHl.  simpl. reflexivity. 
-Qed. 
+  + simpl. rewrite map_app. rewrite IHl.  simpl. reflexivity.
+Qed.
 (** [] *)
 
 (** **** Exercise: 2 stars, recommended (flat_map)  *)
@@ -821,13 +821,13 @@ Fixpoint flat_map {X Y:Type} (f:X -> list Y) (l:list X)
   match l with
   | [] => []
   | h::t => (f h) ++ (flat_map f t)
-  end. 
+  end.
 
 
 Example test_flat_map1:
   flat_map (fun n => [n;n;n]) [1;5;4]
   = [1; 1; 1; 5; 5; 5; 4; 4; 4].
-Proof. reflexivity. Qed. 
+Proof. reflexivity. Qed.
 
 (** [] *)
 
@@ -969,13 +969,13 @@ Proof. reflexivity. Qed.
 (** Prove the correctness of [fold_length]. *)
 
 Theorem fold_length_correct : forall X (l : list X),
-    
+
     fold_length l = length l.
 Proof.
   intros. induction l.
   + reflexivity.
   + simpl.  unfold fold_length. simpl. rewrite <-IHl. reflexivity.
-Qed.     
+Qed.
 
 (** [] *)
 
@@ -998,10 +998,10 @@ Fixpoint map {X Y:Type} (f:X->Y) (l:list X) : (list Y) :=
 *)
 
 
-Definition concat {X :Type} (x: X) (y: list X) : list X :=  x::y. 
+Definition concat {X :Type} (x: X) (y: list X) : list X :=  x::y.
 
 Definition composition {X Y Z: Type} (f : X->Y)(g: Y->Z) :=
-  fun (x: X) => g (f x).  
+  fun (x: X) => g (f x).
 
 Definition fold_map {X Y:Type} (f : X -> Y) (l : list X): (list Y) :=
 fold (fun x acc => f x :: acc) l nil.
@@ -1011,9 +1011,9 @@ fold (fun x acc => f x :: acc) l nil.
 Theorem  fold_correct :forall {X Y:Type} (f: X->Y) (l: list X), fold_map f l = map f l.
 Proof.
   intros. induction l.
-  + reflexivity. 
+  + reflexivity.
   + simpl.   unfold fold_map.  simpl.  rewrite <- IHl. unfold fold_map. reflexivity.
-Qed.    
+Qed.
 
 (* FILL IN HERE *)
 (** [] *)
@@ -1041,7 +1041,7 @@ Definition prod_curry {X Y Z : Type}
     the theorems below to show that the two are inverses. *)
 
 Definition prod_uncurry {X Y Z : Type}
-  (f : X -> Y -> Z) (p : X * Y) : Z := f (fst p) (snd p). 
+  (f : X -> Y -> Z) (p : X * Y) : Z := f (fst p) (snd p).
 
 
 (** As a trivial example of the usefulness of currying, we can use it
@@ -1063,15 +1063,15 @@ Theorem uncurry_curry : forall (X Y Z : Type)
 Proof.
 
   intros. unfold prod_curry. unfold prod_uncurry.  reflexivity.
-Qed.   
+Qed.
 
 
 Theorem curry_uncurry : forall (X Y Z : Type)
                         (f : (X * Y) -> Z) (p : X * Y),
   prod_uncurry (prod_curry f) p = f p.
 Proof.
-  intros.  destruct p as  (a,b). unfold prod_uncurry. unfold prod_curry.  reflexivity. 
-Qed.   
+  intros.  destruct p as  (a,b). unfold prod_uncurry. unfold prod_curry.  reflexivity.
+Qed.
 
 (** [] *)
 
@@ -1135,56 +1135,56 @@ Definition three : nat := @doit3times.
 
 Definition succ (n : nat) : nat :=
   fun  (X: Type)  (f : X-> X) (x: X)=>
-     f (n X f x). 
+     f (n X f x).
 
 
 Example succ_1 : succ zero = one.
-Proof. unfold succ. reflexivity. Qed. 
+Proof. unfold succ. reflexivity. Qed.
 
 Example succ_2 : succ one = two.
-Proof. unfold succ. reflexivity. Qed. 
+Proof. unfold succ. reflexivity. Qed.
 
 
 Example succ_3 : succ two = three.
-Proof. unfold succ. reflexivity. Qed. 
+Proof. unfold succ. reflexivity. Qed.
 
 
 (** Addition of two natural numbers: *)
 
 Definition plus (n m : nat) : nat :=
   fun (X: Type) (f: X->X) (x: X) =>
-    n X f (m X f x).  
+    n X f (m X f x).
 
 
 Example plus_1 : plus zero one = one.
-Proof. unfold succ. reflexivity. Qed. 
+Proof. unfold succ. reflexivity. Qed.
 
 
 Example plus_2 : plus two three = plus three two.
-Proof. unfold succ. reflexivity. Qed. 
+Proof. unfold succ. reflexivity. Qed.
 
 
 Example plus_3 :
   plus (plus two two) three = plus one (plus three three).
-Proof. unfold succ. reflexivity. Qed. 
+Proof. unfold succ. reflexivity. Qed.
 
 
 (** Multiplication: *)
 
 Definition mult (n m : nat) : nat :=
   fun (X: Type) (f: X->X)  =>
-    n X (m X f). 
+    n X (m X f).
 
 Example mult_1 : mult one one = one.
-Proof. unfold mult.  unfold one.  reflexivity. Qed. 
+Proof. unfold mult.  unfold one.  reflexivity. Qed.
 
 
 Example mult_2 : mult zero (plus three three) = zero.
-Proof. unfold mult.   reflexivity. Qed. 
+Proof. unfold mult.   reflexivity. Qed.
 
 
 Example mult_3 : mult two three = plus three three.
-Proof. unfold mult. reflexivity. Qed. 
+Proof. unfold mult. reflexivity. Qed.
 
 
 (** Exponentiation: *)
@@ -1196,19 +1196,19 @@ Proof. unfold mult. reflexivity. Qed.
     type: [nat] itself is usually problematic.) *)
 
 Definition exp (n m : nat) : nat :=
-  fun (X: Type)  => (m (X-> X)) (n X). 
-   
+  fun (X: Type)  => (m (X-> X)) (n X).
+
 
 Example exp_1 : exp two two = plus two two.
-Proof. reflexivity. Qed. 
-       
+Proof. reflexivity. Qed.
+
 
 Example exp_2 : exp three two = plus (mult two (mult two two)) one.
-Proof. reflexivity. Qed. 
+Proof. reflexivity. Qed.
 
 
 Example exp_3 : exp three zero = one.
-Proof. reflexivity. Qed. 
+Proof. reflexivity. Qed.
 
 
 End Church.
