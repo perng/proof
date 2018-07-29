@@ -12,7 +12,7 @@ Require Export Logic.
     propositions, including conjunction, disjunction, and quantifiers.
     In this chapter, we bring a new tool into the mix: _inductive
     definitions_.
-
+ 
     Recall that we have seen two ways of stating that a number [n] is
     even: We can say (1) [evenb n = true], or (2) [exists k, n =
     double k].  Yet another possibility is to say that [n] is even if
@@ -775,15 +775,15 @@ Theorem R_equiv_fR : forall m n o, R m n o <-> fR m n = o.
 Proof.
   intros. split.
   + intros. unfold fR. induction H.
-    ++ reflexivity.
-    ++ simpl. rewrite IHR. reflexivity.
-    ++ rewrite plus_comm. simpl.  rewrite plus_comm.  rewrite IHR. reflexivity.
-    ++ rewrite <- plus_n_Sm in IHR. rewrite  plus_Sn_m in IHR. inversion IHR. reflexivity.
-    ++ rewrite plus_comm. assumption.
+    - reflexivity.
+    - simpl. rewrite IHR. reflexivity.
+    - rewrite plus_comm. simpl.  rewrite plus_comm.  rewrite IHR. reflexivity.
+    - rewrite <- plus_n_Sm in IHR. rewrite  plus_Sn_m in IHR. inversion IHR. reflexivity.
+    - rewrite plus_comm. assumption.
   + intros. unfold fR in H.  induction H.
     induction m.
-    ++ rewrite plus_O_n. apply R_O_n_n.
-    ++ simpl. apply c2. assumption.
+    - rewrite plus_O_n. apply R_O_n_n.
+    - simpl. apply c2. assumption.
 Qed.
 
 (** [] *)
@@ -1065,12 +1065,16 @@ Qed.
 Lemma empty_is_empty : forall T (s : list T),
   ~ (s =~ EmptySet).
 Proof.
+  intros. unfold not. intros. inversion H.
+Qed.   
+  
   (* FILL IN HERE *) Admitted.
 
 Lemma MUnion' : forall T (s : list T) (re1 re2 : reg_exp T),
   s =~ re1 \/ s =~ re2 ->
   s =~ Union re1 re2.
 Proof.
+  
   (* FILL IN HERE *) Admitted.
 
 (** The next lemma is stated in terms of the [fold] function from the
