@@ -1068,14 +1068,17 @@ Proof.
   intros. unfold not. intros. inversion H.
 Qed.   
   
-  (* FILL IN HERE *) Admitted.
+  
 
 Lemma MUnion' : forall T (s : list T) (re1 re2 : reg_exp T),
   s =~ re1 \/ s =~ re2 ->
   s =~ Union re1 re2.
 Proof.
-  
-  (* FILL IN HERE *) Admitted.
+  intros. destruct H.
+  +  apply MUnionL.  assumption.
+  +  apply MUnionR. assumption.
+Qed. 
+
 
 (** The next lemma is stated in terms of the [fold] function from the
     [Poly] chapter: If [ss : list (list T)] represents a sequence of
@@ -1086,7 +1089,13 @@ Lemma MStar' : forall T (ss : list (list T)) (re : reg_exp T),
   (forall s, In s ss -> s =~ re) ->
   fold app ss [] =~ Star re.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. induction ss.
+  + simpl. apply MStar0.
+  + simpl. apply MStarApp.
+  - apply H. simpl. left. reflexivity.
+  - apply IHss. intros. apply H. simpl. right. assumption.
+Qed.
+
 (** [] *)
 
 (** **** Exercise: 4 stars (reg_exp_of_list)  *)
